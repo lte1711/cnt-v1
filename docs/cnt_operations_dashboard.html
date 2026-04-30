@@ -351,6 +351,13 @@
       <div class="alert-list" id="symbol-candidate-body" style="margin-top:10px;"></div>
     </section>
 
+    <section class="card section">
+      <h2>ALGOUSDT Validation</h2>
+      <div id="validation-title" class="metric-value small">--</div>
+      <div id="validation-sub" class="metric-sub">--</div>
+      <div class="stack" id="validation-body" style="margin-top:10px;"></div>
+    </section>
+
     <section class="grid-2 section">
       <div class="card">
         <h2>Breakout V3 Shadow</h2>
@@ -367,7 +374,7 @@
     </section>
 
     <div class="footer" id="footer-note">
-      Sources: performance_snapshot.json | operation_baseline.json | state.json | portfolio_state.json | live_gate_decision.json | orderbook_snapshot.json | symbol_candidate_report.json | scheduler_heartbeat.json | shadow_breakout_v3_snapshot.json
+      Sources: performance_snapshot.json | operation_baseline.json | state.json | portfolio_state.json | live_gate_decision.json | orderbook_snapshot.json | symbol_candidate_report.json | symbol_validation_report.json | scheduler_heartbeat.json | shadow_breakout_v3_snapshot.json
     </div>
   </main>
 
@@ -381,6 +388,7 @@ const DATA_FILES = {
   baseline: "../data/operation_baseline.json",
   orderbook: "../data/orderbook_snapshot.json",
   symbols: "../data/symbol_candidate_report.json",
+  symbolValidation: "../data/symbol_validation_report.json",
   heartbeat: "../data/scheduler_heartbeat.json",
   shadowV3: "../data/shadow_breakout_v3_snapshot.json",
 };
@@ -628,6 +636,22 @@ function renderSymbolCandidates(report) {
   }).join("");
 }
 
+function validationStatus(report) {
+  const checks = report?.promotion_checks ?? {};
+  const ready = Boolean(checks.closed_trades_ge_30)
+    && Boolean(checks.realized_pf_ge_1_3)
+    && Boolean(checks.realized_expectancy_positive)
+    && Boolean(checks.order_reject_rate_lt_2pct)
+    && Boolean(checks.max_consecutive_losses_lte_3);
+  if (ready) {
+    return { title: "REVIEW READY", level: "ok" };
+  }
+  if (num(report?.event_count, 0) > 0) {
+    return { title: "COLLECTING", level: "warn" };
+  }
+  return { title: "NO DATA", level: "warn" };
+}
+
 async function readJSON(path) {
   const response = await fetch(path, { cache: "no-store" });
   if (!response.ok) throw new Error(`${path} returned ${response.status}`);
@@ -643,7 +667,7 @@ async function readJSONOptional(path, fallbackValue) {
   }
 }
 
-function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, heartbeat, shadow) {
+function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, validationReport, heartbeat, shadow) {
   const phase = operationPhase(snapshot, state, gate, baseline);
   const risk = riskGuard(state, snapshot);
   const position = positionState(state);
@@ -654,6 +678,7 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
   const policyNotional = minNotional(baseline);
   const gateReady = gate?.status === "LIVE_READY" || gate?.status === "READY";
   const ob = orderbookState(orderbook);
+  const validation = validationStatus(validationReport);
 
   document.getElementById("last-update").textContent = snapshot?.timestamp ?? "--";
   document.getElementById("phase-badge").textContent = phase.title;
@@ -773,6 +798,26 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
   document.getElementById("symbol-candidate-sub").textContent = `${symbolReport?.strategy ?? "pullback_v1"} | ${symbolReport?.decision ?? "--"}`;
   document.getElementById("symbol-candidate-body").innerHTML = renderSymbolCandidates(symbolReport);
 
+  document.getElementById("validation-title").textContent = validation.title;
+  document.getElementById("validation-title").className = `metric-value small ${cls(validation.level)}`;
+  document.getElementById("validation-sub").textContent = `${validationReport?.symbols?.join(", ") || "ALGOUSDT"} | ${validationReport?.decision ?? "--"}`;
+  document.getElementById("validation-body").innerHTML = kvRows([
+    ["Mode", validationReport?.mode ?? "READ_ONLY_REPORT"],
+    ["Events", validationReport?.event_count ?? 0],
+    ["Orders", validationReport?.order_count ?? 0],
+    ["Closed Trades", validationReport?.closed_trades ?? 0],
+    ["Win Rate", pct(validationReport?.win_rate)],
+    ["Realized Expectancy", fmt(validationReport?.realized_expectancy, 6), num(validationReport?.realized_expectancy, 0) > 0 ? "positive" : "negative"],
+    ["Realized PF", fmt(validationReport?.realized_profit_factor, 3), num(validationReport?.realized_profit_factor, 0) >= 1.3 ? "positive" : "negative"],
+    ["Max Consecutive Losses", validationReport?.max_consecutive_losses ?? 0],
+    ["Reject Rate", pct(validationReport?.order_reject_rate)],
+    ["Partial Fill Rate", pct(validationReport?.partial_fill_rate)],
+    ["Median Slippage", pct(validationReport?.slippage?.median_pct)],
+    ["Orderbook Usable", pct(validationReport?.orderbook?.usable_rate)],
+    ["Avg Spread", pct(validationReport?.orderbook?.avg_spread_pct)],
+    ["Avg Imbalance", fmt(validationReport?.orderbook?.avg_imbalance, 3)],
+  ]);
+
   document.getElementById("shadow-body").innerHTML = kvRows([
     ["Mode", "shadow only"],
     ["Signals", shadow?.signal_count ?? 0],
@@ -789,7 +834,7 @@ async function loadData() {
   button.disabled = true;
   button.textContent = "LOADING";
   try {
-    const [snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, heartbeat, shadow] = await Promise.all([
+    const [snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, validationReport, heartbeat, shadow] = await Promise.all([
       readJSON(DATA_FILES.snapshot),
       readJSON(DATA_FILES.metrics),
       readJSON(DATA_FILES.state),
@@ -798,10 +843,11 @@ async function loadData() {
       readJSON(DATA_FILES.baseline),
       readJSONOptional(DATA_FILES.orderbook, { usable: false, reason: "not_collected" }),
       readJSONOptional(DATA_FILES.symbols, { mode: "READ_ONLY", strategy: "pullback_v1", candidate_count: 0, top_candidates: [], decision: "not_collected" }),
+      readJSONOptional(DATA_FILES.symbolValidation, { mode: "READ_ONLY_REPORT", event_count: 0, order_count: 0, closed_trades: 0, promotion_checks: {}, decision: "not_collected" }),
       readJSON(DATA_FILES.heartbeat),
       readJSON(DATA_FILES.shadowV3),
     ]);
-    render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, heartbeat, shadow);
+    render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, validationReport, heartbeat, shadow);
   } catch (error) {
     document.getElementById("alerts").innerHTML = `
       <div class="alert-item bad">

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-04-30 23:45:57",
+  "mode": "READ_ONLY_REPORT",
+  "source_log": "logs/symbol_validation.log",
+  "symbol_filter": "ALGOUSDT",
+  "symbols": [],
+  "event_count": 0,
+  "order_count": 0,
+  "closed_trades": 0,
+  "wins": 0,
+  "losses": 0,
+  "win_rate": 0.0,
+  "gross_profit": 0,
+  "gross_loss": 0,
+  "net_pnl": 0,
+  "avg_win": 0.0,
+  "avg_loss": 0.0,
+  "realized_expectancy": 0.0,
+  "realized_profit_factor": 0.0,
+  "max_consecutive_losses": 0,
+  "order_reject_count": 0,
+  "order_reject_rate": 0.0,
+  "partial_fill_count": 0,
+  "partial_fill_rate": 0.0,
+  "slippage": {
+    "sample_count": 0,
+    "avg_pct": null,
+    "median_pct": null,
+    "max_abs_pct": null
+  },
+  "orderbook": {
+    "sample_count": 0,
+    "usable_count": 0,
+    "usable_rate": 0.0,
+    "avg_spread_pct": null,
+    "avg_imbalance": null
+  },
+  "promotion_checks": {
+    "closed_trades_ge_30": false,
+    "realized_pf_ge_1_3": false,
+    "realized_expectancy_positive": false,
+    "order_reject_rate_lt_2pct": true,
+    "max_consecutive_losses_lte_3": true
+  },
+  "decision": "review_required_before_symbol_promotion"
+}

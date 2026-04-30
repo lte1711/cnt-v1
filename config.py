@@ -67,6 +67,7 @@ STRATEGY_METRICS_FILE = "data/strategy_metrics.json"
 PERFORMANCE_SNAPSHOT_FILE = "data/performance_snapshot.json"
 LIVE_GATE_DECISION_FILE = "data/live_gate_decision.json"
 ORDERBOOK_SNAPSHOT_FILE = "data/orderbook_snapshot.json"
+SYMBOL_CANDIDATE_REPORT_FILE = "data/symbol_candidate_report.json"
 AUXILIARY_RECOVERY_STATUS_FILE = "data/auxiliary_recovery_status.json"
 SHADOW_BREAKOUT_V2_SNAPSHOT_FILE = "data/shadow_breakout_v2_snapshot.json"
 SHADOW_BREAKOUT_V2_LOG_FILE = "logs/shadow_breakout_v2.jsonl"
@@ -183,6 +184,11 @@ ENTRY_INTERVAL = "1m"
 ORDERBOOK_DEPTH_LIMIT = 100
 ORDERBOOK_TOP_LEVELS = 20
 ORDERBOOK_MAX_SPREAD_PCT = 0.001
+SYMBOL_SCANNER_MAX_SYMBOLS = 25
+SYMBOL_SCANNER_KLINE_LIMIT = 500
+SYMBOL_SCANNER_MIN_SAMPLE_TRADES = 20
+SYMBOL_SCANNER_MIN_WIN_RATE = 0.52
+SYMBOL_SCANNER_MIN_PROFIT_FACTOR = 1.10
 
 # =========================
 # RISK CONFIG

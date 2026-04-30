@@ -344,6 +344,13 @@
       </div>
     </section>
 
+    <section class="card section">
+      <h2>Symbol Candidates</h2>
+      <div id="symbol-candidate-title" class="metric-value small">--</div>
+      <div id="symbol-candidate-sub" class="metric-sub">--</div>
+      <div class="alert-list" id="symbol-candidate-body" style="margin-top:10px;"></div>
+    </section>
+
     <section class="grid-2 section">
       <div class="card">
         <h2>Breakout V3 Shadow</h2>
@@ -360,7 +367,7 @@
     </section>
 
     <div class="footer" id="footer-note">
-      Sources: performance_snapshot.json | operation_baseline.json | state.json | portfolio_state.json | live_gate_decision.json | orderbook_snapshot.json | scheduler_heartbeat.json | shadow_breakout_v3_snapshot.json
+      Sources: performance_snapshot.json | operation_baseline.json | state.json | portfolio_state.json | live_gate_decision.json | orderbook_snapshot.json | symbol_candidate_report.json | scheduler_heartbeat.json | shadow_breakout_v3_snapshot.json
     </div>
   </main>
 
@@ -373,6 +380,7 @@ const DATA_FILES = {
   gate: "../data/live_gate_decision.json",
   baseline: "../data/operation_baseline.json",
   orderbook: "../data/orderbook_snapshot.json",
+  symbols: "../data/symbol_candidate_report.json",
   heartbeat: "../data/scheduler_heartbeat.json",
   shadowV3: "../data/shadow_breakout_v3_snapshot.json",
 };
@@ -590,6 +598,36 @@ function topEntries(object, limit = 3) {
     .join(" | ") || "none";
 }
 
+function renderSymbolCandidates(report) {
+  const candidates = Array.isArray(report?.top_candidates) ? report.top_candidates.slice(0, 5) : [];
+  if (!candidates.length) {
+    return kvRows([
+      ["Mode", report?.mode ?? "READ_ONLY"],
+      ["Strategy", report?.strategy ?? "pullback_v1"],
+      ["Candidates", "none"],
+      ["Decision", report?.decision ?? "not_collected"],
+    ]);
+  }
+  return candidates.map((item, index) => {
+    const replay = item.replay ?? {};
+    const orderbook = item.orderbook ?? {};
+    const promoted = Boolean(item.promotion_candidate);
+    return `
+      <div class="alert-item ${promoted ? "ok" : "warn"}">
+        <strong>${index + 1}. ${item.symbol ?? "--"} | ${promoted ? "PROMOTION CANDIDATE" : "WATCHLIST"}</strong>
+        <span>
+          trades=${replay.trades_closed ?? 0}
+          win=${pct(replay.win_rate)}
+          exp=${fmt(replay.expectancy_pct, 6)}
+          pf=${fmt(replay.profit_factor, 3)}
+          spread=${pct(orderbook.spread_pct)}
+          depth=${fmt(orderbook.bid_depth_notional, 0)}/${fmt(orderbook.ask_depth_notional, 0)}
+        </span>
+      </div>
+    `;
+  }).join("");
+}
+
 async function readJSON(path) {
   const response = await fetch(path, { cache: "no-store" });
   if (!response.ok) throw new Error(`${path} returned ${response.status}`);
@@ -605,7 +643,7 @@ async function readJSONOptional(path, fallbackValue) {
   }
 }
 
-function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, heartbeat, shadow) {
+function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, heartbeat, shadow) {
   const phase = operationPhase(snapshot, state, gate, baseline);
   const risk = riskGuard(state, snapshot);
   const position = positionState(state);
@@ -730,6 +768,11 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
     ["Freshness", `${orderbook?.freshness_ms ?? "--"} ms`],
   ]);
 
+  document.getElementById("symbol-candidate-title").textContent = `${symbolReport?.candidate_count ?? 0} SCANNED`;
+  document.getElementById("symbol-candidate-title").className = "metric-value small neutral";
+  document.getElementById("symbol-candidate-sub").textContent = `${symbolReport?.strategy ?? "pullback_v1"} | ${symbolReport?.decision ?? "--"}`;
+  document.getElementById("symbol-candidate-body").innerHTML = renderSymbolCandidates(symbolReport);
+
   document.getElementById("shadow-body").innerHTML = kvRows([
     ["Mode", "shadow only"],
     ["Signals", shadow?.signal_count ?? 0],
@@ -746,7 +789,7 @@ async function loadData() {
   button.disabled = true;
   button.textContent = "LOADING";
   try {
-    const [snapshot, metrics, state, portfolio, gate, baseline, orderbook, heartbeat, shadow] = await Promise.all([
+    const [snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, heartbeat, shadow] = await Promise.all([
       readJSON(DATA_FILES.snapshot),
       readJSON(DATA_FILES.metrics),
       readJSON(DATA_FILES.state),
@@ -754,10 +797,11 @@ async function loadData() {
       readJSON(DATA_FILES.gate),
       readJSON(DATA_FILES.baseline),
       readJSONOptional(DATA_FILES.orderbook, { usable: false, reason: "not_collected" }),
+      readJSONOptional(DATA_FILES.symbols, { mode: "READ_ONLY", strategy: "pullback_v1", candidate_count: 0, top_candidates: [], decision: "not_collected" }),
       readJSON(DATA_FILES.heartbeat),
       readJSON(DATA_FILES.shadowV3),
     ]);
-    render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, heartbeat, shadow);
+    render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, heartbeat, shadow);
   } catch (error) {
     document.getElementById("alerts").innerHTML = `
       <div class="alert-item bad">

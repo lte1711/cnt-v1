@@ -32,6 +32,7 @@ from config import (
     STATE_FILE,
     STRATEGY_METRICS_FILE,
     STRATEGY_PARAMS,
+    MIN_TRADE_QTY,
     SYMBOL,
     TIME_EXIT_MINUTES,
     TRAILING_STOP_PCT,
@@ -1487,7 +1488,7 @@ def start_engine() -> None:
             state=state,
             balance=quote_balance,
             filters=filters,
-            requested_qty=0.001,
+            requested_qty=MIN_TRADE_QTY,
             portfolio_state=portfolio_state,
         )
 
@@ -1519,7 +1520,7 @@ def start_engine() -> None:
 
         adj = auto_adjust_order_inputs(
             float(decision.validated_price or price),
-            float(decision.validated_qty or 0.001),
+            float(decision.validated_qty or MIN_TRADE_QTY),
             filters,
         )
         final_validation = adj.get("final_validation", {})

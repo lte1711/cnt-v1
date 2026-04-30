@@ -162,7 +162,12 @@ def validate_order(price: float, qty: float, filters: dict) -> dict:
     }
 
 
-def auto_adjust_order_inputs(price: float, qty: float, filters: dict) -> dict:
+def auto_adjust_order_inputs(
+    price: float,
+    qty: float,
+    filters: dict,
+    min_notional_reference_price: float | None = None,
+) -> dict:
     price_filter = filters.get("price_filter", {})
     lot_size_filter = filters.get("lot_size_filter", {})
     notional_filter = filters.get("notional_filter", {})
@@ -198,6 +203,17 @@ def auto_adjust_order_inputs(price: float, qty: float, filters: dict) -> dict:
             else:
                 adjusted_qty = required_qty
 
+    if min_notional and min_notional_reference_price is not None and min_notional_reference_price > 0:
+        reference_notional = float(min_notional_reference_price) * adjusted_qty
+
+        if reference_notional < min_notional:
+            required_qty = min_notional / float(min_notional_reference_price)
+
+            if step_size:
+                adjusted_qty = _ceil_to_step(required_qty, step_size)
+            else:
+                adjusted_qty = required_qty
+
     if adjusted_qty < min_qty:
         adjusted_qty = min_qty
 
@@ -215,6 +231,7 @@ def auto_adjust_order_inputs(price: float, qty: float, filters: dict) -> dict:
     return {
         "input_price": price,
         "input_qty": qty,
+        "min_notional_reference_price": min_notional_reference_price,
         "adjusted_price": adjusted_price,
         "adjusted_qty": adjusted_qty,
         "capped_by_max_qty": capped_by_max_qty,

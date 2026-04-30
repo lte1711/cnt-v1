@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from config import MIN_TRADE_QTY
+
 
 def decide_next_side(previous_state: dict) -> str:
     live_order_response = previous_state.get("live_order_response")
@@ -25,4 +27,4 @@ def decide_base_quantity(previous_state: dict, next_side: str) -> float:
         if executed_qty not in (None, "", "0", 0):
             return float(executed_qty)
 
-    return 0.001
+    return MIN_TRADE_QTY

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from config import MIN_TRADE_QTY
 from src.models.execution_decision import ExecutionDecision
 from src.models.portfolio_state import PortfolioState
 from src.models.strategy_signal import StrategySignal
@@ -13,7 +14,7 @@ def decide_execution(
     state: dict | None,
     balance: dict | None,
     filters: dict,
-    requested_qty: float = 0.001,
+    requested_qty: float = MIN_TRADE_QTY,
     portfolio_state: PortfolioState | None = None,
 ) -> ExecutionDecision:
     if not signal.entry_allowed:
@@ -55,7 +56,18 @@ def decide_execution(
             slippage_rejection_reason="invalid_entry_price_hint",
         )
 
-    adjusted = auto_adjust_order_inputs(candidate_price, requested_qty, filters)
+    min_notional_reference_price = None
+    if signal.exit_model is not None and signal.exit_model.stop_price is not None:
+        min_notional_reference_price = float(signal.exit_model.stop_price)
+
+    policy_qty = max(float(requested_qty), float(MIN_TRADE_QTY))
+
+    adjusted = auto_adjust_order_inputs(
+        candidate_price,
+        policy_qty,
+        filters,
+        min_notional_reference_price=min_notional_reference_price,
+    )
     adjusted_price = float(adjusted["adjusted_price"])
     adjusted_qty = float(adjusted["adjusted_qty"])
     requested_notional = adjusted_price * adjusted_qty

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+from config import ENABLE_PARTIAL_EXIT
 from src.models.exit_signal import ExitSignal
 from src.order_validator import prepare_partial_exit_quantity
 
@@ -48,7 +49,7 @@ def evaluate_exit(open_trade: dict, current_price: float, state: dict, filters: 
     if target_price is not None and current_price >= float(target_price):
         return ExitSignal(True, "TARGET", "target_price_triggered", float(target_price), stop_price, None)
 
-    if partial_exit_progress < len(partial_exit_levels):
+    if ENABLE_PARTIAL_EXIT and partial_exit_progress < len(partial_exit_levels):
         next_level = partial_exit_levels[partial_exit_progress]
         partial_target_price = float(next_level.get("target_price", 0) or 0)
 

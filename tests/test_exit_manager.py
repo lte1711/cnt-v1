@@ -30,7 +30,7 @@ class ExitManagerTests(unittest.TestCase):
         self.assertEqual(exit_signal.exit_type, "STOP")
         self.assertEqual(exit_signal.reason, "stop_price_triggered")
 
-    def test_partial_exit_is_triggered_when_partial_target_is_hit(self) -> None:
+    def test_partial_exit_levels_are_ignored_when_feature_is_disabled(self) -> None:
         open_trade = {
             "entry_price": 100.0,
             "entry_qty": 1.0,
@@ -45,12 +45,11 @@ class ExitManagerTests(unittest.TestCase):
 
         exit_signal = evaluate_exit(open_trade, 101.0, {}, self.filters)
 
-        self.assertTrue(exit_signal.should_exit)
-        self.assertEqual(exit_signal.exit_type, "PARTIAL")
-        self.assertEqual(exit_signal.reason, "partial_exit_target_triggered")
-        self.assertAlmostEqual(exit_signal.partial_qty or 0.0, 0.5, places=4)
+        self.assertFalse(exit_signal.should_exit)
+        self.assertEqual(exit_signal.exit_type, "NONE")
+        self.assertEqual(exit_signal.reason, "no_exit_condition_met")
 
-    def test_partial_exit_below_min_qty_returns_no_exit(self) -> None:
+    def test_partial_exit_min_qty_path_is_inactive_when_feature_is_disabled(self) -> None:
         open_trade = {
             "entry_price": 100.0,
             "entry_qty": 0.0001,
@@ -66,7 +65,7 @@ class ExitManagerTests(unittest.TestCase):
         exit_signal = evaluate_exit(open_trade, 101.0, {}, self.filters)
 
         self.assertFalse(exit_signal.should_exit)
-        self.assertEqual(exit_signal.reason, "partial_exit_qty_below_min_qty")
+        self.assertEqual(exit_signal.reason, "no_exit_condition_met")
 
 
 if __name__ == "__main__":

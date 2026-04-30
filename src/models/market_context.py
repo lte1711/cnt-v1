@@ -15,3 +15,4 @@ class MarketContext:
     open_interest: float | None = None
     long_short_ratio: float | None = None
     orderbook_imbalance: float | None = None
+    orderbook_snapshot: dict | None = None

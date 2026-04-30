@@ -145,6 +145,12 @@ def build_market_feature_snapshot(context: MarketContext, params: dict) -> dict:
         "primary_interval": context.primary_interval,
         "entry_interval": context.entry_interval,
         "last_price": context.last_price,
+        "orderbook": context.orderbook_snapshot
+        or {
+            "usable": False,
+            "reason": "not_collected",
+            "imbalance": context.orderbook_imbalance,
+        },
         "multi_timeframe_trend": f"PRIMARY_{primary_trend}_ENTRY_{entry_trend}",
         "primary": primary_features,
         "entry": {

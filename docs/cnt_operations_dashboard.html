@@ -6,30 +6,27 @@
 <title>CNT Operations Dashboard</title>
 <style>
   :root {
-    --bg: #0c1117;
-    --bg2: #111827;
-    --bg3: #172130;
+    --bg: #0b1016;
+    --panel: #111821;
+    --panel-soft: #151f2b;
     --line: #263244;
-    --text: #d7dee8;
-    --muted: #8fa0b7;
+    --text: #d8e0ea;
+    --muted: #91a1b5;
     --green: #2dd4a0;
     --green-bg: #0d2e26;
     --amber: #f5a623;
-    --amber-bg: #312108;
+    --amber-bg: #33230a;
     --red: #e05c5c;
-    --red-bg: #311111;
+    --red-bg: #321313;
     --blue: #63a4ff;
     --blue-bg: #102035;
-    --cyan: #4fd1c5;
     --mono: "Cascadia Code", "IBM Plex Mono", Consolas, monospace;
     --sans: "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background:
-      radial-gradient(circle at top right, rgba(79, 209, 197, 0.08), transparent 25%),
-      linear-gradient(180deg, #0b1016 0%, #0c1117 100%);
+    background: var(--bg);
     color: var(--text);
     font-family: var(--sans);
   }
@@ -41,10 +38,14 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 16px 24px;
+    padding: 14px 20px;
     border-bottom: 1px solid var(--line);
-    background: rgba(12, 17, 23, 0.94);
-    backdrop-filter: blur(10px);
+    background: rgba(11, 16, 22, 0.96);
+  }
+  main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 18px;
   }
   .brand { display: flex; align-items: baseline; gap: 10px; }
   .brand-title {
@@ -58,23 +59,24 @@
     font-family: var(--mono);
     font-size: 11px;
     color: var(--muted);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
   }
   .header-meta {
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
     justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
   }
   .badge {
     border-radius: 999px;
-    padding: 5px 10px;
+    padding: 5px 9px;
     font-family: var(--mono);
     font-size: 11px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     border: 1px solid var(--line);
+    white-space: nowrap;
   }
   .ok { color: var(--green); background: var(--green-bg); }
   .warn { color: var(--amber); background: var(--amber-bg); }
@@ -82,192 +84,81 @@
   .info { color: var(--blue); background: var(--blue-bg); }
   button {
     border: 1px solid var(--line);
-    background: transparent;
+    background: var(--panel);
     color: var(--text);
-    border-radius: 8px;
-    padding: 8px 12px;
+    border-radius: 6px;
+    padding: 7px 10px;
     font-family: var(--mono);
     font-size: 11px;
     cursor: pointer;
   }
-  button:hover { background: var(--bg3); }
-  main {
-    max-width: 1260px;
-    margin: 0 auto;
-    padding: 24px;
-  }
-  .grid-4, .grid-3, .grid-2 { display: grid; gap: 12px; }
-  .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  button:hover { background: var(--panel-soft); }
+  .grid-2, .grid-3, .grid-4 { display: grid; gap: 10px; }
   .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .section { margin-bottom: 10px; }
   .card {
-    background: linear-gradient(180deg, rgba(23, 33, 48, 0.75), rgba(17, 24, 39, 0.95));
+    background: var(--panel);
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    padding: 14px;
   }
   .card h2 {
     margin: 0 0 10px;
-    font-size: 13px;
-    font-family: var(--mono);
     color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .hero {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  .gate-title { margin: 0 0 6px; font-size: 20px; color: #fff; }
-  .gate-sub { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-  .big-number {
     font-family: var(--mono);
-    font-size: 32px;
-    font-weight: 600;
-    color: #fff;
-  }
-  .big-number.small { font-size: 24px; }
-  .progress {
-    width: 100%;
-    height: 8px;
-    border-radius: 999px;
-    overflow: hidden;
-    background: #1a2331;
-    margin-top: 8px;
-  }
-  .progress > div {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--green), var(--cyan));
-    transition: width 0.5s ease;
+    font-size: 12px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
   }
   .metric-label {
     color: var(--muted);
     font-family: var(--mono);
-    font-size: 11px;
-    text-transform: uppercase;
+    font-size: 10px;
     letter-spacing: 0.08em;
-    margin-bottom: 8px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
   }
   .metric-value {
-    font-family: var(--mono);
-    font-size: 28px;
     color: #fff;
+    font-family: var(--mono);
+    font-size: 26px;
     line-height: 1.1;
+    word-break: break-word;
   }
-  .metric-sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
+  .metric-value.small { font-size: 21px; }
+  .metric-sub {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 12px;
+  }
   .positive { color: var(--green); }
   .negative { color: var(--red); }
-  .pipeline {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-  }
-  .pipe {
-    background: rgba(8, 13, 22, 0.35);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 12px;
-    text-align: center;
-  }
-  .pipe .label {
-    font-family: var(--mono);
-    color: var(--muted);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-top: 6px;
-  }
-  .pipe .value {
-    font-family: var(--mono);
-    font-size: 24px;
-    color: #fff;
-  }
-  .pipe .sub {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-  .alert-list { display: flex; flex-direction: column; gap: 8px; }
-  .top-warning-strip {
+  .neutral { color: var(--blue); }
+  .warning-strip {
     display: none;
-    margin: 0 0 12px;
-    padding: 14px 16px;
-    border-radius: 14px;
-    border: 1px solid rgba(224, 92, 92, 0.35);
-    background: linear-gradient(180deg, rgba(49, 17, 17, 0.92), rgba(35, 12, 12, 0.96));
-    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.16);
+    border-color: rgba(224, 92, 92, 0.45);
+    background: var(--red-bg);
   }
-  .top-warning-strip.visible { display: block; }
-  .top-warning-title {
-    margin: 0 0 8px;
-    color: #ffd9d9;
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .top-warning-items {
+  .warning-strip.visible { display: block; }
+  .pill-row {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
   }
-  .top-warning-pill {
+  .pill {
+    border: 1px solid rgba(224, 92, 92, 0.32);
     border-radius: 999px;
-    border: 1px solid rgba(224, 92, 92, 0.28);
-    background: rgba(224, 92, 92, 0.1);
+    padding: 6px 9px;
     color: #ffe2e2;
-    padding: 6px 10px;
+    background: rgba(224, 92, 92, 0.12);
     font-family: var(--mono);
     font-size: 11px;
-    letter-spacing: 0.04em;
   }
-  .alert-item {
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    padding: 12px;
-    font-size: 13px;
-  }
-  .alert-item strong {
-    display: block;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    margin-bottom: 5px;
-  }
-  .alert-item.bad { color: #ffd9d9; background: rgba(224, 92, 92, 0.12); }
-  .alert-item.warn { color: #ffe7be; background: rgba(245, 166, 35, 0.12); }
-  .alert-item.ok { color: #dafbef; background: rgba(45, 212, 160, 0.12); }
-  table { width: 100%; border-collapse: collapse; }
-  th, td {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--line);
-    text-align: right;
-    font-family: var(--mono);
-    font-size: 12px;
-  }
-  th:first-child, td:first-child { text-align: left; }
-  th { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
-  tr:last-child td { border-bottom: 0; }
-  .pf-track {
-    width: 72px;
-    height: 5px;
-    background: #1a2331;
-    border-radius: 999px;
-    overflow: hidden;
-    display: inline-block;
-    margin-right: 8px;
-    vertical-align: middle;
-  }
-  .pf-fill { height: 100%; border-radius: 999px; }
-  .stack { display: flex; flex-direction: column; gap: 8px; }
+  .stack { display: flex; flex-direction: column; gap: 0; }
   .kv-row {
     display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 12px;
     padding: 8px 0;
@@ -277,27 +168,60 @@
   }
   .kv-row:last-child { border-bottom: 0; }
   .kv-key { color: var(--muted); }
-  .kv-val { color: #fff; text-align: right; max-width: 70%; word-break: break-word; }
-  .mono { font-family: var(--mono); }
-  .footer {
-    margin-top: 16px;
-    text-align: center;
-    color: var(--muted);
+  .kv-val {
+    color: #fff;
+    text-align: right;
+    max-width: 70%;
+    word-break: break-word;
+  }
+  .alert-list { display: flex; flex-direction: column; gap: 8px; }
+  .alert-item {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 13px;
+  }
+  .alert-item strong {
+    display: block;
+    margin-bottom: 5px;
     font-family: var(--mono);
     font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .alert-item.bad { color: #ffd9d9; background: rgba(224, 92, 92, 0.12); }
+  .alert-item.warn { color: #ffe7be; background: rgba(245, 166, 35, 0.12); }
+  .alert-item.ok { color: #dafbef; background: rgba(45, 212, 160, 0.12); }
+  .progress {
+    height: 7px;
+    margin-top: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #1b2634;
+  }
+  .progress > div {
+    height: 100%;
+    width: 0%;
+    background: var(--green);
   }
   .help {
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 10px;
+    margin-top: 10px;
+    padding: 10px;
     border: 1px dashed var(--line);
+    border-radius: 8px;
     color: var(--muted);
     font-size: 12px;
   }
+  .footer {
+    margin-top: 14px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    text-align: center;
+  }
   @media (max-width: 980px) {
-    .hero, .grid-4, .grid-3, .grid-2, .pipeline {
-      grid-template-columns: 1fr;
-    }
+    header { align-items: flex-start; flex-direction: column; }
+    .header-meta { justify-content: flex-start; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -305,11 +229,12 @@
   <header>
     <div class="brand">
       <div class="brand-title">CNT<span>/</span>ops</div>
-      <div class="brand-sub">Operational Decision Console</div>
+      <div class="brand-sub">Post-Policy Operations Console</div>
     </div>
     <div class="header-meta">
-      <span id="health-badge" class="badge info">LOADING</span>
+      <span id="phase-badge" class="badge info">LOADING</span>
       <span id="gate-badge" class="badge warn">LOADING</span>
+      <span id="position-badge" class="badge info">LOADING</span>
       <span class="badge info">SPOT TESTNET</span>
       <span id="last-update" class="badge">--</span>
       <button id="refresh-btn" type="button">REFRESH</button>
@@ -317,131 +242,65 @@
   </header>
 
   <main>
-    <section class="hero">
+    <section class="grid-4 section">
       <div class="card">
-        <h2>Live Gate</h2>
-        <div class="gate-title" id="gate-title">LOADING</div>
-        <div class="gate-sub" id="gate-reason">loading</div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:16px;">
+        <div class="metric-label">Operating Phase</div>
+        <div id="phase-title" class="metric-value small">--</div>
+        <div id="phase-sub" class="metric-sub">--</div>
+      </div>
+      <div class="card">
+        <div class="metric-label">Official Gate</div>
+        <div id="gate-title" class="metric-value small">--</div>
+        <div id="gate-reason" class="metric-sub">--</div>
+      </div>
+      <div class="card">
+        <div class="metric-label">Position State</div>
+        <div id="position-title" class="metric-value small">--</div>
+        <div id="position-sub" class="metric-sub">--</div>
+      </div>
+      <div class="card">
+        <div class="metric-label">Risk Guard</div>
+        <div id="risk-title" class="metric-value small">--</div>
+        <div id="risk-sub" class="metric-sub">--</div>
+      </div>
+    </section>
+
+    <section class="card warning-strip section" id="warning-strip">
+      <h2>Current Operating Warnings</h2>
+      <div class="pill-row" id="warning-items"></div>
+    </section>
+
+    <section class="grid-2 section">
+      <div class="card">
+        <h2>Post-Policy Observation</h2>
+        <div class="grid-3">
           <div>
-            <div class="metric-label">Closed Trades</div>
-            <div class="big-number" id="gate-count">0 / 50</div>
+            <div class="metric-label">Closed Sample</div>
+            <div id="post-sample" class="metric-value small">--</div>
+            <div id="post-sample-sub" class="metric-sub">--</div>
           </div>
-          <div style="text-align:right;">
-            <div class="metric-label">Gate Rule</div>
-            <div class="mono" id="gate-rule">closed_trades &gt;= 50 · expectancy &gt; 0 · net_pnl &gt; 0 · max_consecutive_losses &lt;= 5 · risk_guard_observed</div>
-          </div>
-        </div>
-        <div class="progress"><div id="gate-progress"></div></div>
-        <div class="help" id="gate-explain">
-          This panel follows the live gate evaluator exactly. The source of truth is closed trades, expectancy, net pnl, max consecutive losses, and observed risk guard evidence.
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>System Health</h2>
-        <div class="big-number small" id="health-title">LOADING</div>
-        <div class="metric-sub" id="health-summary">diagnosing...</div>
-        <div class="alert-list" id="alerts" style="margin-top:12px;"></div>
-      </div>
-    </section>
-
-    <section class="top-warning-strip" id="top-warning-strip">
-      <div class="top-warning-title">PERFORMANCE WARNING</div>
-      <div class="top-warning-items" id="top-warning-items"></div>
-    </section>
-
-    <section style="margin-bottom:12px;">
-      <div class="card">
-        <h2>Auxiliary Recovery</h2>
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;">
           <div>
-            <div class="big-number small" id="aux-title">LOADING</div>
-            <div class="metric-sub" id="aux-summary">checking post-isolation recovery status...</div>
+            <div class="metric-label">Minimum Quantity</div>
+            <div id="policy-qty" class="metric-value small">--</div>
+            <div id="policy-qty-sub" class="metric-sub">--</div>
           </div>
-          <div id="aux-badges" class="header-meta" style="justify-content:flex-start;"></div>
+          <div>
+            <div class="metric-label">Tuning Gate</div>
+            <div id="tuning-title" class="metric-value small">--</div>
+            <div id="tuning-sub" class="metric-sub">--</div>
+          </div>
         </div>
-        <div class="help" id="aux-explain" style="margin-top:12px;">
-          This is an explanatory layer only. It does not override the official live gate.
-        </div>
-        <div class="stack" style="margin-top:12px;" id="aux-body"></div>
+        <div class="progress"><div id="post-progress"></div></div>
+        <div class="stack" id="baseline-body" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Current Alerts</h2>
+        <div class="alert-list" id="alerts"></div>
       </div>
     </section>
 
-    <section class="grid-2" style="margin-bottom:12px;">
-      <div class="card">
-        <h2>Current Pullback Position</h2>
-        <div class="big-number small" id="position-title">LOADING</div>
-        <div class="metric-sub" id="position-summary">checking open trade...</div>
-        <div class="header-meta" id="position-badges" style="justify-content:flex-start;margin-top:12px;"></div>
-        <div class="stack" style="margin-top:12px;" id="position-body"></div>
-      </div>
-      <div class="card">
-        <h2>Scheduler Heartbeat</h2>
-        <div class="big-number small" id="heartbeat-title">LOADING</div>
-        <div class="metric-sub" id="heartbeat-summary">checking scheduler freshness...</div>
-        <div class="header-meta" id="heartbeat-badges" style="justify-content:flex-start;margin-top:12px;"></div>
-        <div class="stack" style="margin-top:12px;" id="heartbeat-body"></div>
-      </div>
-    </section>
-
-    <section class="grid-2" style="margin-bottom:12px;">
-      <div class="card">
-        <h2>Runtime Mode</h2>
-        <div class="big-number small" id="mode-title">LOADING</div>
-        <div class="metric-sub" id="mode-summary">checking active runtime mode...</div>
-        <div class="header-meta" id="mode-badges" style="justify-content:flex-start;margin-top:12px;"></div>
-      </div>
-      <div class="card">
-        <h2>Breakout V3 Shadow</h2>
-        <div class="grid-4">
-          <div class="card" style="padding:12px;">
-            <div class="metric-label">Signals</div>
-            <div id="v3-signals" class="metric-value" style="font-size:22px;">0</div>
-          </div>
-          <div class="card" style="padding:12px;">
-            <div class="metric-label">Allowed</div>
-            <div id="v3-allowed" class="metric-value" style="font-size:22px;">0</div>
-          </div>
-          <div class="card" style="padding:12px;">
-            <div class="metric-label">Soft 3+</div>
-            <div id="v3-soft-good" class="metric-value" style="font-size:22px;">0</div>
-          </div>
-          <div class="card" style="padding:12px;">
-            <div class="metric-label">Updated</div>
-            <div id="v3-updated" class="metric-value" style="font-size:18px;">--</div>
-          </div>
-        </div>
-        <div class="stack" style="margin-top:12px;" id="v3-shadow-body"></div>
-      </div>
-    </section>
-
-    <section style="margin-bottom:12px;">
-      <div class="card">
-        <h2>V3 Setup Bottleneck</h2>
-        <div class="grid-4">
-          <div class="card" style="padding:12px;">
-            <div class="metric-label">Setup Pass</div>
-            <div id="v3-setup-pass" class="metric-value" style="font-size:22px;">0 / 0</div>
-          </div>
-          <div class="card" style="padding:12px;">
-            <div class="metric-label">Setup Pass Rate</div>
-            <div id="v3-setup-pass-rate" class="metric-value" style="font-size:22px;">--</div>
-          </div>
-          <div class="card" style="padding:12px;">
-            <div class="metric-label">Top Setup Pressure</div>
-            <div id="v3-setup-top" class="metric-value" style="font-size:18px;">--</div>
-          </div>
-          <div class="card" style="padding:12px;">
-            <div class="metric-label">Trace Counts</div>
-            <div class="metric-sub">allowed=<span id="v3-setup-allowed-traces">0</span> | setup-pass blocked=<span id="v3-setup-blocked-traces">0</span></div>
-          </div>
-        </div>
-        <div class="stack" style="margin-top:12px;" id="v3-setup-body"></div>
-      </div>
-    </section>
-
-    <section class="grid-3" style="margin-bottom:12px;">
+    <section class="grid-3 section">
       <div class="card">
         <div class="metric-label">Expectancy</div>
         <div id="m-exp" class="metric-value">--</div>
@@ -459,37 +318,49 @@
       </div>
     </section>
 
-    <section class="grid-2" style="margin-bottom:12px;">
+    <section class="grid-2 section">
       <div class="card">
-        <h2>Engine State</h2>
-        <div class="stack">
-          <div class="kv-row"><span class="kv-key">Mode</span><span class="kv-val">ONE_SHOT / 10m</span></div>
-          <div class="kv-row"><span class="kv-key">Symbol</span><span id="e-symbol" class="kv-val">--</span></div>
-          <div class="kv-row"><span class="kv-key">Status</span><span id="e-status" class="kv-val">--</span></div>
-          <div class="kv-row"><span class="kv-key">Action</span><span id="e-action" class="kv-val">--</span></div>
-          <div class="kv-row"><span class="kv-key">Pending</span><span id="e-pending" class="kv-val">none</span></div>
-          <div class="kv-row"><span class="kv-key">Open Trade</span><span id="e-open" class="kv-val">none</span></div>
-          <div class="kv-row"><span class="kv-key">Price</span><span id="e-price" class="kv-val">--</span></div>
-        </div>
+        <h2>Position And Engine State</h2>
+        <div class="header-meta" id="engine-badges" style="justify-content:flex-start;margin-bottom:8px;"></div>
+        <div class="stack" id="engine-body"></div>
       </div>
-
       <div class="card">
-        <h2>Risk Sync</h2>
-        <div class="stack" id="risk-sync-body"></div>
+        <h2>Scheduler Heartbeat</h2>
+        <div class="header-meta" id="heartbeat-badges" style="justify-content:flex-start;margin-bottom:8px;"></div>
+        <div class="stack" id="heartbeat-body"></div>
       </div>
     </section>
 
-    <section class="card">
-      <h2>Usage Note</h2>
+    <section class="grid-2 section">
+      <div class="card">
+        <h2>Strategy Runtime</h2>
+        <div class="stack" id="strategy-body"></div>
+      </div>
+      <div class="card">
+        <h2>Orderbook Auxiliary</h2>
+        <div id="orderbook-title" class="metric-value small">--</div>
+        <div id="orderbook-sub" class="metric-sub">--</div>
+        <div class="stack" id="orderbook-body" style="margin-top:10px;"></div>
+      </div>
+    </section>
+
+    <section class="grid-2 section">
+      <div class="card">
+        <h2>Breakout V3 Shadow</h2>
+        <div class="stack" id="shadow-body"></div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Dashboard Sources</h2>
       <div class="help">
-        This dashboard expects the CNT repository root to be served over HTTP.
-        Run <span class="mono">python scripts/serve_dashboard.py</span> and open
-        <span class="mono">http://127.0.0.1:8000/docs/cnt_operations_dashboard.html</span>.
+        This dashboard is aligned to the post-policy baseline in <span class="mono">data/operation_baseline.json</span>.
+        It reads runtime state from repository-local JSON files and does not submit orders or mutate state.
       </div>
     </section>
 
     <div class="footer" id="footer-note">
-      CNT runtime sources: ../data/performance_snapshot.json | ../data/strategy_metrics.json | ../data/state.json | ../data/portfolio_state.json | ../data/live_gate_decision.json | ../data/auxiliary_recovery_status.json | ../data/scheduler_heartbeat.json | ../data/shadow_breakout_v3_snapshot.json | ../reports/breakout_v3_allowed_trace.json | ../reports/breakout_v3_setup_pass_blocked_trace.json
+      Sources: performance_snapshot.json | operation_baseline.json | state.json | portfolio_state.json | live_gate_decision.json | orderbook_snapshot.json | scheduler_heartbeat.json | shadow_breakout_v3_snapshot.json
     </div>
   </main>
 
@@ -500,14 +371,14 @@ const DATA_FILES = {
   state: "../data/state.json",
   portfolio: "../data/portfolio_state.json",
   gate: "../data/live_gate_decision.json",
-  auxRecovery: "../data/auxiliary_recovery_status.json",
+  baseline: "../data/operation_baseline.json",
+  orderbook: "../data/orderbook_snapshot.json",
   heartbeat: "../data/scheduler_heartbeat.json",
   shadowV3: "../data/shadow_breakout_v3_snapshot.json",
-  v3AllowedTrace: "../reports/breakout_v3_allowed_trace.json",
-  v3SetupPassBlockedTrace: "../reports/breakout_v3_setup_pass_blocked_trace.json",
 };
 
-const GATE_THRESHOLD = 50;
+const FALLBACK_MIN_TRADE_QTY = 0.01;
+const FALLBACK_MIN_NOTIONAL = 5.0;
 
 function fmt(value, digits = 4) {
   if (value == null || Number.isNaN(Number(value))) return "--";
@@ -519,265 +390,209 @@ function pct(value) {
   return (Number(value) * 100).toFixed(1) + "%";
 }
 
-function computeSystemHealth(snapshot) {
-  const selected = snapshot.selected_signals ?? 0;
-  const executed = snapshot.executed_trades ?? 0;
-  const pf = Number(snapshot.profit_factor ?? 0);
-  if (selected === 0) return "CRITICAL";
-  if (executed === 0) return "DEGRADED";
-  if (pf < 1) return "WEAK";
-  return "HEALTHY";
+function cls(level) {
+  if (level === "ok") return "positive";
+  if (level === "bad") return "negative";
+  return "neutral";
 }
 
-function gateReady(snapshot) {
-  const riskStats = snapshot.risk_trigger_stats ?? {};
-  const observedRiskGuard = Number(riskStats.LOSS_COOLDOWN ?? 0) + Number(riskStats.DAILY_LOSS_LIMIT ?? 0);
-  return (
-    (snapshot.closed_trades ?? 0) >= GATE_THRESHOLD &&
-    Number(snapshot.expectancy ?? 0) > 0 &&
-    Number(snapshot.net_pnl ?? 0) > 0 &&
-    Number(snapshot.max_consecutive_losses ?? 0) <= 5 &&
-    observedRiskGuard > 0
-  );
+function badgeCls(level) {
+  if (level === "ok") return "ok";
+  if (level === "bad") return "bad";
+  return "warn";
 }
 
-function gateReasons(snapshot) {
-  const reasons = [];
-  const riskStats = snapshot.risk_trigger_stats ?? {};
-  const observedRiskGuard = Number(riskStats.LOSS_COOLDOWN ?? 0) + Number(riskStats.DAILY_LOSS_LIMIT ?? 0);
-  if ((snapshot.closed_trades ?? 0) < GATE_THRESHOLD) {
-    reasons.push(`sample ${snapshot.closed_trades ?? 0}/${GATE_THRESHOLD}`);
-  }
-  if (Number(snapshot.expectancy ?? 0) <= 0) {
-    reasons.push(`expectancy ${fmt(snapshot.expectancy, 6)} <= 0`);
-  }
-  if (Number(snapshot.net_pnl ?? 0) <= 0) {
-    reasons.push(`net_pnl ${fmt(snapshot.net_pnl, 6)} <= 0`);
-  }
-  if (Number(snapshot.max_consecutive_losses ?? 0) > 5) {
-    reasons.push(`max_consecutive_losses ${snapshot.max_consecutive_losses ?? 0} > 5`);
-  }
-  if (observedRiskGuard <= 0) {
-    reasons.push("risk_guard_not_observed");
-  }
-  return reasons.length ? reasons.join(" | ") : "all evaluator conditions satisfied";
+function num(value, fallback = 0) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
 }
 
-function buildTopWarnings(snapshot, metrics, state, gate) {
-  const warnings = [];
-  const breakout = metrics?.breakout_v1 ?? {};
+function kvRows(rows) {
+  return rows.map(([key, value, valueClass = ""]) => `
+    <div class="kv-row">
+      <span class="kv-key">${key}</span>
+      <span class="kv-val ${valueClass}">${value}</span>
+    </div>
+  `).join("");
+}
+
+function baselineClosedTrades(baseline) {
+  return num(baseline?.baseline_metrics?.closed_trades, 0);
+}
+
+function minimumReviewSample(baseline) {
+  return num(baseline?.observation_rule?.minimum_review_sample, 10);
+}
+
+function postPolicyClosedTrades(snapshot, baseline) {
+  return Math.max(0, num(snapshot?.closed_trades, 0) - baselineClosedTrades(baseline));
+}
+
+function minTradeQty(baseline) {
+  return num(baseline?.policy?.min_trade_qty, FALLBACK_MIN_TRADE_QTY);
+}
+
+function minNotional(baseline) {
+  return num(baseline?.policy?.min_notional, FALLBACK_MIN_NOTIONAL);
+}
+
+function notional(price, qty) {
+  const priceNum = num(price, 0);
+  const qtyNum = num(qty, 0);
+  if (priceNum <= 0 || qtyNum <= 0) return null;
+  return priceNum * qtyNum;
+}
+
+function operationPhase(snapshot, state, gate, baseline) {
+  const daily = num(state?.risk_metrics?.daily_loss_count, 0);
+  const postClosed = postPolicyClosedTrades(snapshot, baseline);
+  const reviewSample = minimumReviewSample(baseline);
+  if (daily >= 3) {
+    return {
+      title: "RISK PAUSE",
+      detail: `daily loss count ${daily}; wait for risk reset before new entries.`,
+      level: "bad",
+    };
+  }
   if ((gate?.status ?? "") === "FAIL") {
-    warnings.push(`FAIL: ${gate?.reason ?? "UNKNOWN_REASON"}`);
-    warnings.push(" PERFORMANCE DEGRADED");
+    return {
+      title: "OBSERVE ONLY",
+      detail: `official gate ${gate?.status ?? "--"} / ${gate?.reason ?? "--"}.`,
+      level: "warn",
+    };
   }
-  if (Number(snapshot.expectancy ?? 0) < 0) {
-    warnings.push(`EXPECTANCY < 0 (${fmt(snapshot.expectancy, 6)})`);
+  if (postClosed < reviewSample) {
+    return {
+      title: "POST-POLICY OBSERVATION",
+      detail: `${postClosed}/${reviewSample} closed trades after baseline.`,
+      level: "warn",
+    };
   }
-  if (Number(snapshot.net_pnl ?? 0) < 0) {
-    warnings.push(`NET PNL < 0 (${fmt(snapshot.net_pnl, 6)})`);
+  return {
+    title: "READY FOR REVIEW",
+    detail: "post-policy sample target reached.",
+    level: "ok",
+  };
+}
+
+function riskGuard(state, snapshot) {
+  const daily = num(state?.risk_metrics?.daily_loss_count, 0);
+  const consecutive = num(state?.risk_metrics?.consecutive_losses, 0);
+  const dailyHits = num(snapshot?.risk_trigger_stats?.DAILY_LOSS_LIMIT, 0);
+  return {
+    title: daily >= 3 ? "DAILY LIMIT" : "NORMAL",
+    detail: `daily=${daily} | consecutive=${consecutive} | hits=${dailyHits}`,
+    level: daily >= 3 ? "bad" : "ok",
+  };
+}
+
+function positionState(state) {
+  const hasOpen = Boolean(state?.open_trade);
+  const hasPending = Boolean(state?.pending_order);
+  if (hasOpen) {
+    return {
+      title: "OPEN",
+      detail: `${state.open_trade.strategy_name ?? "--"} qty ${fmt(state.open_trade.entry_qty, 5)}`,
+      level: "warn",
+    };
   }
-  if (Number(snapshot.profit_factor ?? 0) < 1) {
-    warnings.push(`PF < 1 (${fmt(snapshot.profit_factor, 3)})`);
+  if (hasPending) {
+    return {
+      title: "PENDING",
+      detail: `${state.pending_order.side ?? "--"} ${state.pending_order.status ?? "--"}`,
+      level: "warn",
+    };
   }
-  if (Number(state?.risk_metrics?.daily_loss_count ?? 0) >= 3) {
-    warnings.push(`DAILY LOSS COUNT = ${state?.risk_metrics?.daily_loss_count ?? 0}`);
-  }
-  if (Number(breakout.expectancy ?? 0) < 0) {
-    warnings.push(`BREAKOUT NEGATIVE (${fmt(breakout.expectancy, 6)})`);
-  }
-  if ((state?.strategy_name ?? "") === "pullback_v1") {
-    warnings.push("PULLBACK-ONLY RUNTIME ACTIVE");
-  }
+  return {
+    title: "FLAT",
+    detail: "no open trade and no pending order.",
+    level: "ok",
+  };
+}
+
+function buildWarnings(snapshot, metrics, state, gate, baseline) {
+  const warnings = [];
+  const postClosed = postPolicyClosedTrades(snapshot, baseline);
+  const reviewSample = minimumReviewSample(baseline);
+  if ((gate?.status ?? "") === "FAIL") warnings.push(`GATE FAIL: ${gate?.reason ?? "UNKNOWN"}`);
+  if (num(snapshot?.expectancy, 0) < 0) warnings.push(`EXPECTANCY < 0 (${fmt(snapshot.expectancy, 6)})`);
+  if (num(snapshot?.net_pnl, 0) < 0) warnings.push(`NET PNL < 0 (${fmt(snapshot.net_pnl, 6)})`);
+  if (num(snapshot?.profit_factor, 0) < 1) warnings.push(`PF < 1 (${fmt(snapshot.profit_factor, 3)})`);
+  if (num(state?.risk_metrics?.daily_loss_count, 0) >= 3) warnings.push(`RISK PAUSE: DAILY LOSS COUNT ${state.risk_metrics.daily_loss_count}`);
+  if (postClosed < reviewSample) warnings.push(`POST-POLICY SAMPLE ${postClosed}/${reviewSample}`);
+  if (!state?.open_trade) warnings.push("NO OPEN POSITION");
+  if (num(metrics?.breakout_v1?.expectancy, 0) < 0) warnings.push(`BREAKOUT_V1 HISTORICAL NEGATIVE (${fmt(metrics.breakout_v1.expectancy, 6)})`);
   return warnings;
 }
 
-function buildModeBadges(state, shadow) {
-  const badges = [];
-  const runtimeStrategy = String(state?.strategy_name ?? "--");
-  const action = String(state?.action ?? "--");
-  const signalCount = Number(shadow?.signal_count ?? 0);
-  const allowedCount = Number(shadow?.allowed_signal_count ?? 0);
-  badges.push(`<span class="badge ok">LIVE ACTIVE: ${runtimeStrategy}</span>`);
-  badges.push(`<span class="badge info">ACTION: ${action}</span>`);
-  badges.push(`<span class="badge warn">BREAKOUT_V3 SHADOW_ONLY</span>`);
-  badges.push(`<span class="badge info">SHADOW SIGNALS: ${signalCount}</span>`);
-  badges.push(`<span class="badge ${allowedCount > 0 ? "ok" : "warn"}">SHADOW ALLOWED: ${allowedCount}</span>`);
-  return badges.join("");
-}
-
-function recoveryBadgeClass(status) {
-  if (status === "RECOVERY_EVIDENCE_CONFIRMED" || status === "RECOVERY_EVIDENCE_READY") return "ok";
-  if (status === "RECOVERY_OBSERVATION_IN_PROGRESS") return "warn";
-  return "bad";
-}
-
-function buildAuxiliaryRecovery(auxStatus, gate) {
-  const pullback = auxStatus?.pullback_v1 ?? {};
-  const recovery = auxStatus?.recovery_signal ?? {};
-  const runtime = auxStatus?.runtime_state ?? {};
-  const officialGate = auxStatus?.official_gate ?? gate ?? {};
-  const status = recovery.all_recovery_criteria_passed
-    ? "RECOVERY_EVIDENCE_CONFIRMED"
-    : (recovery.status ?? "UNKNOWN");
-  const closedTrades = Number(pullback.closed_trades ?? 0);
-  const minSample = Number(recovery.min_sample_required ?? 50);
-  const tradesRemaining = Math.max(0, minSample - closedTrades);
-  const summary = status === "RECOVERY_OBSERVATION_IN_PROGRESS"
-    ? `Need ${tradesRemaining} more closed pullback_v1 trades before recovery can be confirmed.`
-    : "Auxiliary recovery status is read from data/auxiliary_recovery_status.json.";
-
-  const checks = [
-    { label: "sample size", pass: Boolean(recovery.is_statistically_valid), text: `${closedTrades} / ${minSample}` },
-    { label: "expectancy", pass: Boolean(recovery.is_positive_expectancy), text: fmt(pullback.expectancy, 6) },
-    { label: "profit factor", pass: Boolean(recovery.profit_factor_pass), text: `${fmt(pullback.profit_factor, 3)} / ${fmt(recovery.min_profit_factor ?? 1.1, 1)}` },
-    { label: "official gate", pass: String(officialGate.status ?? "") !== "FAIL", text: `${officialGate.status ?? "--"} | ${officialGate.reason ?? "--"}` },
-    { label: "runtime", pass: String(runtime.active_strategy ?? "") === "pullback_v1", text: `${runtime.active_strategy ?? "--"} | ${runtime.last_action ?? "--"}` },
-    { label: "risk counter sync", pass: Boolean(auxStatus?.risk_counter_sync?.daily_loss_count_synced && auxStatus?.risk_counter_sync?.consecutive_losses_synced), text: `daily=${auxStatus?.risk_counter_sync?.state_daily_loss_count ?? "--"} | consecutive=${auxStatus?.risk_counter_sync?.state_consecutive_losses ?? "--"}` },
-  ];
-
-  return { status, summary, checks, pullback, recovery, officialGate, tradesRemaining };
-}
-
-function buildPositionObservation(state) {
-  const openTrade = state?.open_trade ?? null;
-  if (!openTrade) {
-    return {
-      title: "NO OPEN TRADE",
-      summary: "No pullback_v1 exit result is pending right now.",
-      badges: [`<span class="badge info">PENDING ORDER: ${state?.pending_order ? "YES" : "NO"}</span>`],
-      rows: [
-        ["Action", state?.action ?? "--"],
-        ["Price", state?.price != null ? fmt(state.price, 2) : "--"],
-      ],
-    };
-  }
-
-  const price = Number(state?.price ?? 0);
-  const entry = Number(openTrade.entry_price ?? 0);
-  const target = Number(openTrade.target_price ?? 0);
-  const stop = Number(openTrade.stop_price ?? 0);
-  const targetGap = target > 0 && price > 0 ? target - price : null;
-  const stopGap = stop > 0 && price > 0 ? price - stop : null;
-  const unrealized = entry > 0 && price > 0 ? (price - entry) * Number(openTrade.entry_qty ?? 0) : null;
-
-  return {
-    title: "WAITING EXIT RESULT",
-    summary: "Next evidence point is whether this pullback_v1 trade closes as WIN or LOSS.",
-    badges: [
-      `<span class="badge warn">OPEN_TRADE</span>`,
-      `<span class="badge info">ENTRY #${openTrade.entry_order_id ?? "--"}</span>`,
-      `<span class="badge ${price >= entry ? "ok" : "bad"}">PRICE ${fmt(price, 2)}</span>`,
-    ],
-    rows: [
-      ["Strategy", openTrade.strategy_name ?? "--"],
-      ["Entry", fmt(entry, 2)],
-      ["Current", fmt(price, 2)],
-      ["Target", fmt(target, 2)],
-      ["Stop", fmt(stop, 2)],
-      ["Qty", fmt(openTrade.entry_qty, 5)],
-      ["Unrealized PnL", unrealized == null ? "--" : `${unrealized >= 0 ? "+" : ""}${fmt(unrealized, 6)}`],
-      ["Distance To Target", targetGap == null ? "--" : fmt(targetGap, 4)],
-      ["Distance To Stop", stopGap == null ? "--" : fmt(stopGap, 4)],
-      ["Entry Time", openTrade.entry_time ?? "--"],
-    ],
-  };
-}
-
-function buildHeartbeatStatus(heartbeat) {
-  const gapDetected = Boolean(heartbeat?.gap_detected);
-  const exitCode = Number(heartbeat?.exit_code ?? -1);
-  const ok = !gapDetected && exitCode === 0;
-  return {
-    title: ok ? "SCHEDULER OK" : "CHECK SCHEDULER",
-    summary: `last finish=${heartbeat?.last_finish_time ?? "--"} | interval=${heartbeat?.expected_interval_minutes ?? "--"}m`,
-    badges: [
-      `<span class="badge ${ok ? "ok" : "bad"}">EXIT ${heartbeat?.exit_code ?? "--"}</span>`,
-      `<span class="badge ${gapDetected ? "bad" : "ok"}">GAP ${gapDetected ? "YES" : "NO"}</span>`,
-      `<span class="badge info">EVENT ${heartbeat?.last_event ?? "--"}</span>`,
-    ],
-    rows: [
-      ["Current Time", heartbeat?.current_time ?? "--"],
-      ["Last Start", heartbeat?.last_start_time ?? "--"],
-      ["Last Finish", heartbeat?.last_finish_time ?? "--"],
-      ["Gap Threshold", `${heartbeat?.gap_threshold_minutes ?? "--"} minutes`],
-      ["Gap Duration", heartbeat?.gap_duration_minutes ?? "none"],
-      ["Error", heartbeat?.error_message || "none"],
-    ],
-  };
-}
-
-function blockerSummary(distribution) {
-  const entries = Object.entries(distribution ?? {});
-  if (!entries.length) return "none";
-  return entries
-    .sort((a, b) => Number(b[1]) - Number(a[1]))
-    .slice(0, 2)
-    .map(([key, value]) => `${key}=${value}`)
-    .join(" | ");
-}
-
-function buildAlerts(snapshot, metrics, state, gate) {
+function buildAlerts(snapshot, metrics, state, gate, baseline) {
   const alerts = [];
-  const total = snapshot.total_signals ?? 0;
-  const selected = snapshot.selected_signals ?? 0;
-  const selectedRate = total > 0 ? selected / total : 0;
-  const pf = Number(snapshot.profit_factor ?? 0);
-  const consec = Number(state?.risk_metrics?.consecutive_losses ?? snapshot.max_consecutive_losses ?? 0);
-  const breakoutExp = Number(metrics?.breakout_v1?.expectancy ?? 0);
-
+  const postClosed = postPolicyClosedTrades(snapshot, baseline);
+  const reviewSample = minimumReviewSample(baseline);
+  const openTrade = state?.open_trade;
   if ((gate?.status ?? "") === "FAIL") {
-    alerts.push({ level: "bad", title: "FAIL REASON", text: gate?.reason ?? "UNKNOWN_REASON" });
+    alerts.push({ level: "bad", title: "OFFICIAL GATE FAIL", text: gate?.reason ?? "UNKNOWN_REASON" });
   }
-  if (Number(snapshot.expectancy ?? 0) < 0) {
-    alerts.push({ level: "bad", title: "EXPECTANCY < 0", text: `current expectancy is ${fmt(snapshot.expectancy, 6)}.` });
+  if (num(state?.risk_metrics?.daily_loss_count, 0) >= 3) {
+    alerts.push({ level: "bad", title: "RISK PAUSE ACTIVE", text: "Daily loss limit is active. New entries should remain blocked until reset." });
   }
-  if (Number(snapshot.net_pnl ?? 0) < 0) {
-    alerts.push({ level: "bad", title: "NET PNL < 0", text: `current net pnl is ${fmt(snapshot.net_pnl, 6)}.` });
+  if (postClosed < reviewSample) {
+    alerts.push({ level: "warn", title: "OBSERVATION SAMPLE NOT READY", text: `${postClosed}/${reviewSample} post-policy closed trades. Strategy tuning remains blocked.` });
   }
-
-  if (selectedRate < 0.05) {
-    alerts.push({ level: "bad", title: "RANKER WARNING", text: `selection rate is ${pct(selectedRate)}.` });
+  if (!openTrade && !state?.pending_order) {
+    alerts.push({ level: "ok", title: "POSITION CLEARED", text: "The legacy undersized position is closed. No pending order remains." });
   }
-  if (pf < 1) {
-    alerts.push({ level: "bad", title: "WEAK PROFIT FACTOR", text: `PF ${fmt(pf, 3)} is below profitability threshold.` });
-  }
-  if (breakoutExp < 0) {
-    alerts.push({ level: "bad", title: "BREAKOUT NEGATIVE", text: `breakout expectancy is ${fmt(breakoutExp, 6)}.` });
-  }
-  if (consec >= 3) {
-    alerts.push({ level: "warn", title: "CONSECUTIVE LOSS PRESSURE", text: `consecutive losses reached ${consec}.` });
-  }
-  if (!alerts.length) {
-    alerts.push({ level: "ok", title: "NO CRITICAL ALERT", text: "No immediate alert is active on the dashboard." });
+  if (num(snapshot?.profit_factor, 0) < 1) {
+    alerts.push({ level: "warn", title: "HISTORICAL EDGE WEAK", text: `Profit factor is ${fmt(snapshot.profit_factor, 3)} on cumulative data.` });
   }
   return alerts;
 }
 
-function classificationText(snapshot, gateStatus, gateReason) {
-  const health = computeSystemHealth(snapshot);
-  const lines = [];
-  if (gateStatus === "LIVE_READY" || gateStatus === "READY") {
-    lines.push("Live gate conditions are satisfied under the evaluator rules.");
-  } else {
-    lines.push(`Live gate is not ready. Reason: ${gateReason}.`);
+function heartbeatStatus(heartbeat) {
+  const ok = !heartbeat?.gap_detected && num(heartbeat?.exit_code, -1) === 0;
+  return {
+    ok,
+    badges: [
+      `<span class="badge ${ok ? "ok" : "bad"}">EXIT ${heartbeat?.exit_code ?? "--"}</span>`,
+      `<span class="badge ${heartbeat?.gap_detected ? "bad" : "ok"}">GAP ${heartbeat?.gap_detected ? "YES" : "NO"}</span>`,
+      `<span class="badge info">EVENT ${heartbeat?.last_event ?? "--"}</span>`,
+    ],
+  };
+}
+
+function orderbookState(orderbook) {
+  if (!orderbook || orderbook.reason === "not_collected") {
+    return {
+      title: "NOT COLLECTED",
+      detail: "orderbook snapshot has not been refreshed yet.",
+      level: "warn",
+    };
   }
-  if (health === "CRITICAL") {
-    lines.push("No strategy is being selected.");
-  } else if (health === "DEGRADED") {
-    lines.push("Selection exists but execution throughput is blocked.");
-  } else if (health === "WEAK") {
-    lines.push("Execution is active but edge quality is weak.");
-  } else {
-    lines.push("Selection, execution, and performance layers are active.");
+  if (orderbook.usable) {
+    return {
+      title: "USABLE",
+      detail: `imbalance=${fmt(orderbook.imbalance, 3)} | spread=${pct(orderbook.spread_pct)}`,
+      level: "ok",
+    };
   }
-  return lines.join(" ");
+  return {
+    title: "UNUSABLE",
+    detail: orderbook.reason ?? "UNKNOWN_REASON",
+    level: "warn",
+  };
+}
+
+function topEntries(object, limit = 3) {
+  return Object.entries(object ?? {})
+    .sort((a, b) => num(b[1], 0) - num(a[1], 0))
+    .slice(0, limit)
+    .map(([key, value]) => `${key}=${value}`)
+    .join(" | ") || "none";
 }
 
 async function readJSON(path) {
   const response = await fetch(path, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`${path} returned ${response.status}`);
-  }
+  if (!response.ok) throw new Error(`${path} returned ${response.status}`);
   const text = await response.text();
   return JSON.parse(text.replace(/^\uFEFF/, ""));
 }
@@ -790,166 +605,60 @@ async function readJSONOptional(path, fallbackValue) {
   }
 }
 
-function describePending(pending) {
-  if (!pending) return "none";
-  return `${pending.side} ${pending.status} #${pending.orderId ?? "--"}`;
-}
+function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, heartbeat, shadow) {
+  const phase = operationPhase(snapshot, state, gate, baseline);
+  const risk = riskGuard(state, snapshot);
+  const position = positionState(state);
+  const postClosed = postPolicyClosedTrades(snapshot, baseline);
+  const reviewSample = minimumReviewSample(baseline);
+  const samplePct = reviewSample > 0 ? Math.min(100, (postClosed / reviewSample) * 100) : 0;
+  const policyQty = minTradeQty(baseline);
+  const policyNotional = minNotional(baseline);
+  const gateReady = gate?.status === "LIVE_READY" || gate?.status === "READY";
+  const ob = orderbookState(orderbook);
 
-function describeOpenTrade(openTrade) {
-  if (!openTrade) return "none";
-  return `${openTrade.strategy_name ?? "--"} @ ${fmt(openTrade.entry_price, 2)} qty ${fmt(openTrade.entry_qty, 5)}`;
-}
+  document.getElementById("last-update").textContent = snapshot?.timestamp ?? "--";
+  document.getElementById("phase-badge").textContent = phase.title;
+  document.getElementById("phase-badge").className = `badge ${badgeCls(phase.level)}`;
+  document.getElementById("gate-badge").textContent = gate?.status ?? "--";
+  document.getElementById("gate-badge").className = `badge ${gateReady ? "ok" : gate?.status === "FAIL" ? "bad" : "warn"}`;
+  document.getElementById("position-badge").textContent = position.title;
+  document.getElementById("position-badge").className = `badge ${badgeCls(position.level)}`;
 
-function riskSyncText(state, snapshot) {
-  const risk = state?.risk_metrics ?? {};
-  const daily = Number(risk.daily_loss_count ?? 0);
-  const consecutive = Number(risk.consecutive_losses ?? 0);
-  const dailyHits = Number(snapshot?.risk_trigger_stats?.DAILY_LOSS_LIMIT ?? 0);
-  return `
-    <div class="kv-row"><span class="kv-key">Daily Loss Count</span><span class="kv-val">${daily}</span></div>
-    <div class="kv-row"><span class="kv-key">Consecutive Losses</span><span class="kv-val">${consecutive}</span></div>
-    <div class="kv-row"><span class="kv-key">Daily Loss Hits</span><span class="kv-val">${dailyHits}</span></div>
-    <div class="kv-row"><span class="kv-key">Sync Status</span><span class="kv-val">${daily >= 0 && consecutive >= 0 ? "state/portfolio aligned" : "check required"}</span></div>
-  `;
-}
-
-function buildV3SetupIsolation(shadow, allowedTrace, setupPassBlockedTrace) {
-  const signalCount = Number(shadow?.signal_count ?? 0);
-  const setupPassCount = Number(shadow?.stage_pass_counts?.setup ?? 0);
-  const setupFailCount = Number(shadow?.stage_fail_counts?.setup ?? 0);
-  const setupPassRate = signalCount > 0 ? setupPassCount / signalCount : 0;
-  const requestedCounts = {
-    vwap_distance_fail: Number(shadow?.secondary_blocker_distribution?.vwap_distance_fail ?? 0),
-    band_width_fail: Number(shadow?.secondary_blocker_distribution?.band_width_fail ?? 0),
-    volume_fail: Number(shadow?.secondary_blocker_distribution?.volume_fail ?? 0),
-    band_expansion_fail: Number(shadow?.secondary_blocker_distribution?.band_expansion_fail ?? 0),
-    setup_not_ready: Number(shadow?.first_blocker_distribution?.setup_not_ready ?? 0),
-  };
-  const sortedRequested = Object.entries(requestedCounts).sort((a, b) => Number(b[1]) - Number(a[1]));
-  const [topKey, topValue] = sortedRequested[0] ?? ["none", 0];
-  const allowedTraceCount = Array.isArray(allowedTrace) ? allowedTrace.length : 0;
-  const setupPassBlockedTraceCount = Array.isArray(setupPassBlockedTrace) ? setupPassBlockedTrace.length : 0;
-  const allowedWithSetupPass = Array.isArray(allowedTrace)
-    ? allowedTrace.filter(item => item?.stage_flags?.setup === true).length
-    : 0;
-  const allowedWithSetupFail = Array.isArray(allowedTrace)
-    ? allowedTrace.filter(item => item?.stage_flags?.setup === false).length
-    : 0;
-  return {
-    signalCount,
-    setupPassCount,
-    setupFailCount,
-    setupPassRate,
-    topKey,
-    topValue,
-    allowedTraceCount,
-    setupPassBlockedTraceCount,
-    allowedWithSetupPass,
-    allowedWithSetupFail,
-  };
-}
-
-function render(snapshot, metrics, state, portfolio, gate, auxStatus, heartbeat, shadow, allowedTrace, setupPassBlockedTrace) {
-  const health = computeSystemHealth(snapshot);
-  const healthBadge = document.getElementById("health-badge");
-  healthBadge.textContent = health;
-  healthBadge.className = `badge ${health === "HEALTHY" ? "ok" : health === "WEAK" ? "warn" : "bad"}`;
-
-  document.getElementById("last-update").textContent = snapshot.timestamp ?? "--";
-
-  const gateStatus = gate?.status ?? (gateReady(snapshot) ? "READY" : "NOT_READY");
-  const gateReason = gate?.reason ?? gateReasons(snapshot);
-  const gateIsReady = gateStatus === "LIVE_READY" || gateStatus === "READY";
-  const gateBadge = document.getElementById("gate-badge");
-  gateBadge.textContent = gateStatus;
-  gateBadge.className = `badge ${gateIsReady ? "ok" : "warn"}`;
-
-  document.getElementById("gate-title").textContent = gateStatus;
-  document.getElementById("gate-reason").textContent = gateReason;
-  document.getElementById("gate-count").textContent = `${snapshot.closed_trades ?? 0} / ${GATE_THRESHOLD}`;
-  document.getElementById("gate-progress").style.width = `${Math.min(100, ((snapshot.closed_trades ?? 0) / GATE_THRESHOLD) * 100)}%`;
-  document.getElementById("gate-rule").textContent = "closed_trades >= 50 | expectancy > 0 | net_pnl > 0 | max_consecutive_losses <= 5 | risk_guard_observed";
-  document.getElementById("gate-explain").textContent = classificationText(snapshot, gateStatus, gateReason);
-
-  const aux = buildAuxiliaryRecovery(auxStatus, gate);
-  document.getElementById("aux-title").textContent = aux.status;
-  document.getElementById("aux-summary").textContent = aux.summary;
-  document.getElementById("aux-badges").innerHTML = [
-    `<span class="badge ${recoveryBadgeClass(aux.status)}">AUX: ${aux.status}</span>`,
-    `<span class="badge ${gateStatus === "FAIL" ? "warn" : "ok"}">OFFICIAL GATE: ${gateStatus}</span>`,
-    `<span class="badge ${aux.tradesRemaining > 0 ? "warn" : "ok"}">NEED ${aux.tradesRemaining} TRADES</span>`,
-    `<span class="badge ${aux.recovery?.all_recovery_criteria_passed ? "ok" : "warn"}">CONFIRMED: ${aux.recovery?.all_recovery_criteria_passed ? "YES" : "NO"}</span>`
-  ].join("");
-  document.getElementById("aux-explain").textContent = "Auxiliary recovery is explanatory only. It does not change, relax, or override the official live gate.";
-  document.getElementById("aux-body").innerHTML = aux.checks.map(check => `
-    <div class="kv-row">
-      <span class="kv-key">${check.label}</span>
-      <span class="kv-val ${check.pass ? "positive" : "negative"}">${check.pass ? "PASS" : "CHECK"} | ${check.text}</span>
-    </div>
-  `).join("");
-
-  const position = buildPositionObservation(state);
+  document.getElementById("phase-title").textContent = phase.title;
+  document.getElementById("phase-title").className = `metric-value small ${cls(phase.level)}`;
+  document.getElementById("phase-sub").textContent = phase.detail;
+  document.getElementById("gate-title").textContent = gate?.status ?? "--";
+  document.getElementById("gate-title").className = `metric-value small ${gateReady ? "positive" : "negative"}`;
+  document.getElementById("gate-reason").textContent = gate?.reason ?? "--";
   document.getElementById("position-title").textContent = position.title;
-  document.getElementById("position-summary").textContent = position.summary;
-  document.getElementById("position-badges").innerHTML = position.badges.join("");
-  document.getElementById("position-body").innerHTML = position.rows.map(([key, value]) => `
-    <div class="kv-row"><span class="kv-key">${key}</span><span class="kv-val">${value}</span></div>
-  `).join("");
+  document.getElementById("position-title").className = `metric-value small ${cls(position.level)}`;
+  document.getElementById("position-sub").textContent = position.detail;
+  document.getElementById("risk-title").textContent = risk.title;
+  document.getElementById("risk-title").className = `metric-value small ${cls(risk.level)}`;
+  document.getElementById("risk-sub").textContent = risk.detail;
 
-  const heartbeatStatus = buildHeartbeatStatus(heartbeat);
-  document.getElementById("heartbeat-title").textContent = heartbeatStatus.title;
-  document.getElementById("heartbeat-summary").textContent = heartbeatStatus.summary;
-  document.getElementById("heartbeat-badges").innerHTML = heartbeatStatus.badges.join("");
-  document.getElementById("heartbeat-body").innerHTML = heartbeatStatus.rows.map(([key, value]) => `
-    <div class="kv-row"><span class="kv-key">${key}</span><span class="kv-val">${value}</span></div>
-  `).join("");
+  const warnings = buildWarnings(snapshot, metrics, state, gate, baseline);
+  document.getElementById("warning-items").innerHTML = warnings.map(item => `<span class="pill">${item}</span>`).join("");
+  document.getElementById("warning-strip").classList.toggle("visible", warnings.length > 0);
 
-  document.getElementById("health-title").textContent = health;
-  document.getElementById("health-summary").textContent = `selected=${snapshot.selected_signals ?? 0}, executed=${snapshot.executed_trades ?? 0}, PF=${fmt(snapshot.profit_factor, 3)}`;
+  document.getElementById("post-sample").textContent = `${postClosed} / ${reviewSample}`;
+  document.getElementById("post-sample").className = `metric-value small ${postClosed >= reviewSample ? "positive" : "negative"}`;
+  document.getElementById("post-sample-sub").textContent = `baseline ${baseline?.baseline_timestamp ?? "--"}`;
+  document.getElementById("policy-qty").textContent = `${fmt(policyQty, 2)} ${baseline?.policy?.min_trade_qty_asset ?? "ETH"}`;
+  document.getElementById("policy-qty-sub").textContent = `${fmt(policyNotional, 2)} ${baseline?.policy?.min_notional_asset ?? "USDT"} min notional; entry and stop reference`;
+  document.getElementById("tuning-title").textContent = postClosed >= reviewSample ? "REVIEW" : "LOCKED";
+  document.getElementById("tuning-title").className = `metric-value small ${postClosed >= reviewSample ? "positive" : "negative"}`;
+  document.getElementById("tuning-sub").textContent = postClosed >= reviewSample ? "sample target reached" : "parameter changes remain forbidden";
+  document.getElementById("post-progress").style.width = `${samplePct}%`;
+  document.getElementById("baseline-body").innerHTML = kvRows([
+    ["Baseline Action", baseline?.baseline_action ?? "--"],
+    ["Baseline Reason", baseline?.baseline_reason ?? "--"],
+    ["Exclude Legacy Trades", String(Boolean(baseline?.observation_rule?.exclude_legacy_undersized_trades))],
+    ["Policy Mode", baseline?.current_operating_phase ?? "--"],
+  ]);
 
-  const topWarnings = buildTopWarnings(snapshot, metrics, state, gate);
-  const topWarningStrip = document.getElementById("top-warning-strip");
-  const topWarningItems = document.getElementById("top-warning-items");
-  topWarningItems.innerHTML = topWarnings.map(text => `<span class="top-warning-pill">${text}</span>`).join("");
-  topWarningStrip.classList.toggle("visible", topWarnings.length > 0);
-
-  const runtimeStrategy = String(state?.strategy_name ?? "--");
-  const runtimeAction = String(state?.action ?? "--");
-  const allowedCount = Number(shadow?.allowed_signal_count ?? 0);
-  const shadowSignals = Number(shadow?.signal_count ?? 0);
-  const softDist = shadow?.soft_pass_count_distribution ?? {};
-  const softGood = Object.entries(softDist).reduce((sum, [key, value]) => (
-    Number(key) >= 3 ? sum + Number(value) : sum
-  ), 0);
-  const v3Setup = buildV3SetupIsolation(shadow, allowedTrace, setupPassBlockedTrace);
-  document.getElementById("mode-title").textContent = runtimeStrategy === "pullback_v1" ? "PULLBACK-ONLY ACTIVE" : runtimeStrategy.toUpperCase();
-  document.getElementById("mode-summary").textContent = `runtime action=${runtimeAction} | breakout_v3 remains shadow-only`;
-  document.getElementById("mode-badges").innerHTML = buildModeBadges(state, shadow);
-  document.getElementById("v3-signals").textContent = String(shadowSignals);
-  document.getElementById("v3-allowed").textContent = String(allowedCount);
-  document.getElementById("v3-allowed").className = `metric-value ${allowedCount > 0 ? "positive" : "negative"}`;
-  document.getElementById("v3-soft-good").textContent = String(softGood);
-  document.getElementById("v3-soft-good").className = `metric-value ${softGood > 0 ? "positive" : "negative"}`;
-  document.getElementById("v3-updated").textContent = shadow?.last_updated ?? "--";
-  document.getElementById("v3-shadow-body").innerHTML = `
-    <div class="kv-row"><span class="kv-key">First Blockers</span><span class="kv-val">${blockerSummary(shadow?.first_blocker_distribution)}</span></div>
-    <div class="kv-row"><span class="kv-key">Hard Blockers</span><span class="kv-val">${blockerSummary(shadow?.hard_blocker_distribution)}</span></div>
-    <div class="kv-row"><span class="kv-key">Soft Pass Dist</span><span class="kv-val">${Object.entries(softDist).map(([k, v]) => `${k}:${v}`).join(" | ") || "none"}</span></div>
-    <div class="kv-row"><span class="kv-key">Stage Fail</span><span class="kv-val">${Object.entries(shadow?.stage_fail_counts ?? {}).map(([k, v]) => `${k}:${v}`).join(" | ") || "none"}</span></div>
-  `;
-  document.getElementById("v3-setup-pass").textContent = `${v3Setup.setupPassCount} / ${v3Setup.signalCount}`;
-  document.getElementById("v3-setup-pass-rate").textContent = pct(v3Setup.setupPassRate);
-  document.getElementById("v3-setup-top").textContent = `${v3Setup.topKey} = ${v3Setup.topValue}`;
-  document.getElementById("v3-setup-allowed-traces").textContent = String(v3Setup.allowedTraceCount);
-  document.getElementById("v3-setup-blocked-traces").textContent = String(v3Setup.setupPassBlockedTraceCount);
-  document.getElementById("v3-setup-body").innerHTML = `
-    <div class="kv-row"><span class="kv-key">Setup Fail Count</span><span class="kv-val">${v3Setup.setupFailCount}</span></div>
-    <div class="kv-row"><span class="kv-key">Allowed With Setup Pass</span><span class="kv-val">${v3Setup.allowedWithSetupPass}</span></div>
-    <div class="kv-row"><span class="kv-key">Allowed With Setup Fail</span><span class="kv-val">${v3Setup.allowedWithSetupFail}</span></div>
-    <div class="kv-row"><span class="kv-key">Interpretation</span><span class="kv-val">setup bottleneck isolation only | no tuning | no activation</span></div>
-  `;
-
-  const alerts = buildAlerts(snapshot, metrics, state, gate);
+  const alerts = buildAlerts(snapshot, metrics, state, gate, baseline);
   document.getElementById("alerts").innerHTML = alerts.map(alert => `
     <div class="alert-item ${alert.level}">
       <strong>${alert.title}</strong>
@@ -957,23 +666,79 @@ function render(snapshot, metrics, state, portfolio, gate, auxStatus, heartbeat,
     </div>
   `).join("");
 
-  document.getElementById("m-pf").textContent = fmt(snapshot.profit_factor, 3);
-  document.getElementById("m-pf").className = `metric-value ${Number(snapshot.profit_factor ?? 0) >= 1 ? "positive" : "negative"}`;
-  document.getElementById("m-pf-sub").textContent = `closed=${snapshot.closed_trades ?? 0} | max consecutive losses=${snapshot.max_consecutive_losses ?? 0}`;
-  document.getElementById("m-exp").textContent = fmt(snapshot.expectancy, 6);
-  document.getElementById("m-exp").className = `metric-value ${Number(snapshot.expectancy ?? 0) > 0 ? "positive" : "negative"}`;
-  document.getElementById("m-exp-sub").textContent = `win rate ${pct(snapshot.win_rate ?? 0)} | wins=${snapshot.wins ?? 0} losses=${snapshot.losses ?? 0}`;
-  document.getElementById("m-pnl").textContent = `${Number(snapshot.net_pnl ?? 0) >= 0 ? "+" : ""}${fmt(snapshot.net_pnl, 6)}`;
-  document.getElementById("m-pnl").className = `metric-value ${Number(snapshot.net_pnl ?? 0) >= 0 ? "positive" : "negative"}`;
-  document.getElementById("m-pnl-sub").textContent = `avg win ${fmt(snapshot.avg_win, 5)} / avg loss ${fmt(snapshot.avg_loss, 5)}`;
+  document.getElementById("m-exp").textContent = fmt(snapshot?.expectancy, 6);
+  document.getElementById("m-exp").className = `metric-value ${num(snapshot?.expectancy, 0) > 0 ? "positive" : "negative"}`;
+  document.getElementById("m-exp-sub").textContent = `closed=${snapshot?.closed_trades ?? 0} | post-policy=${postClosed}`;
+  document.getElementById("m-pf").textContent = fmt(snapshot?.profit_factor, 3);
+  document.getElementById("m-pf").className = `metric-value ${num(snapshot?.profit_factor, 0) >= 1 ? "positive" : "negative"}`;
+  document.getElementById("m-pf-sub").textContent = `wins=${snapshot?.wins ?? 0} losses=${snapshot?.losses ?? 0}`;
+  document.getElementById("m-pnl").textContent = `${num(snapshot?.net_pnl, 0) >= 0 ? "+" : ""}${fmt(snapshot?.net_pnl, 6)}`;
+  document.getElementById("m-pnl").className = `metric-value ${num(snapshot?.net_pnl, 0) >= 0 ? "positive" : "negative"}`;
+  document.getElementById("m-pnl-sub").textContent = `avg win ${fmt(snapshot?.avg_win, 5)} / avg loss ${fmt(snapshot?.avg_loss, 5)}`;
 
-  document.getElementById("e-symbol").textContent = state.symbol ?? "--";
-  document.getElementById("e-status").textContent = state.status ?? "--";
-  document.getElementById("e-action").textContent = state.action ?? "--";
-  document.getElementById("e-pending").textContent = describePending(state.pending_order);
-  document.getElementById("e-open").textContent = describeOpenTrade(state.open_trade);
-  document.getElementById("e-price").textContent = state.price != null ? fmt(state.price, 2) : "--";
-  document.getElementById("risk-sync-body").innerHTML = riskSyncText(state, snapshot);
+  document.getElementById("engine-badges").innerHTML = [
+    `<span class="badge ${position.level === "ok" ? "ok" : "warn"}">POSITION ${position.title}</span>`,
+    `<span class="badge ${state?.pending_order ? "warn" : "ok"}">PENDING ${state?.pending_order ? "YES" : "NO"}</span>`,
+    `<span class="badge info">ACTION ${state?.action ?? "--"}</span>`,
+  ].join("");
+  document.getElementById("engine-body").innerHTML = kvRows([
+    ["Symbol", state?.symbol ?? "--"],
+    ["Strategy", state?.strategy_name ?? "--"],
+    ["Status", state?.status ?? "--"],
+    ["Last Run", state?.last_run_time ?? "--"],
+    ["Current Price", state?.price != null ? fmt(state.price, 2) : "--"],
+    ["Open Trade", state?.open_trade ? "yes" : "none", state?.open_trade ? "negative" : "positive"],
+    ["Pending Order", state?.pending_order ? "yes" : "none", state?.pending_order ? "negative" : "positive"],
+    ["Portfolio Exposure", fmt(portfolio?.total_exposure, 6)],
+  ]);
+
+  const hb = heartbeatStatus(heartbeat);
+  document.getElementById("heartbeat-badges").innerHTML = hb.badges.join("");
+  document.getElementById("heartbeat-body").innerHTML = kvRows([
+    ["Current Time", heartbeat?.current_time ?? "--"],
+    ["Last Start", heartbeat?.last_start_time ?? "--"],
+    ["Last Finish", heartbeat?.last_finish_time ?? "--"],
+    ["Expected Interval", `${heartbeat?.expected_interval_minutes ?? "--"} minutes`],
+    ["Gap Threshold", `${heartbeat?.gap_threshold_minutes ?? "--"} minutes`],
+    ["Error", heartbeat?.error_message || "none", heartbeat?.error_message ? "negative" : "positive"],
+  ]);
+
+  document.getElementById("strategy-body").innerHTML = kvRows([
+    ["Active Strategy", state?.strategy_name ?? "--"],
+    ["Runtime Mode", "ONE_SHOT / scheduled"],
+    ["Entry Policy", `BUY LIMIT only; min qty ${fmt(policyQty, 2)}`],
+    ["Exit Policy", "SELL LIMIT target; SELL MARKET protective"],
+    ["Live Gate", `${gate?.status ?? "--"} / ${gate?.reason ?? "--"}`, gateReady ? "positive" : "negative"],
+    ["Risk Counters", `daily=${state?.risk_metrics?.daily_loss_count ?? "--"} | consecutive=${state?.risk_metrics?.consecutive_losses ?? "--"}`],
+  ]);
+
+  document.getElementById("orderbook-title").textContent = ob.title;
+  document.getElementById("orderbook-title").className = `metric-value small ${cls(ob.level)}`;
+  document.getElementById("orderbook-sub").textContent = ob.detail;
+  document.getElementById("orderbook-body").innerHTML = kvRows([
+    ["Mode", "auxiliary observation only"],
+    ["Symbol", orderbook?.symbol ?? state?.symbol ?? "--"],
+    ["Usable", String(Boolean(orderbook?.usable)), orderbook?.usable ? "positive" : "negative"],
+    ["Reason", orderbook?.reason ?? "--"],
+    ["Best Bid", orderbook?.best_bid != null ? fmt(orderbook.best_bid, 2) : "--"],
+    ["Best Ask", orderbook?.best_ask != null ? fmt(orderbook.best_ask, 2) : "--"],
+    ["Spread", orderbook?.spread != null ? fmt(orderbook.spread, 6) : "--"],
+    ["Spread Pct", pct(orderbook?.spread_pct)],
+    ["Bid Depth Notional", orderbook?.bid_depth_notional != null ? fmt(orderbook.bid_depth_notional, 2) : "--"],
+    ["Ask Depth Notional", orderbook?.ask_depth_notional != null ? fmt(orderbook.ask_depth_notional, 2) : "--"],
+    ["Imbalance", orderbook?.imbalance != null ? fmt(orderbook.imbalance, 3) : "--"],
+    ["Freshness", `${orderbook?.freshness_ms ?? "--"} ms`],
+  ]);
+
+  document.getElementById("shadow-body").innerHTML = kvRows([
+    ["Mode", "shadow only"],
+    ["Signals", shadow?.signal_count ?? 0],
+    ["Allowed", shadow?.allowed_signal_count ?? 0],
+    ["Allowed Ratio", pct(shadow?.allowed_signal_ratio ?? 0)],
+    ["Top First Blockers", topEntries(shadow?.first_blocker_distribution)],
+    ["Top Hard Blockers", topEntries(shadow?.hard_blocker_distribution)],
+    ["Updated", shadow?.last_updated ?? "--"],
+  ]);
 }
 
 async function loadData() {
@@ -981,24 +746,23 @@ async function loadData() {
   button.disabled = true;
   button.textContent = "LOADING";
   try {
-    const [snapshot, metrics, state, portfolio, gate, auxStatus, heartbeat, shadow, allowedTrace, setupPassBlockedTrace] = await Promise.all([
+    const [snapshot, metrics, state, portfolio, gate, baseline, orderbook, heartbeat, shadow] = await Promise.all([
       readJSON(DATA_FILES.snapshot),
       readJSON(DATA_FILES.metrics),
       readJSON(DATA_FILES.state),
       readJSON(DATA_FILES.portfolio),
       readJSON(DATA_FILES.gate),
-      readJSON(DATA_FILES.auxRecovery),
+      readJSON(DATA_FILES.baseline),
+      readJSONOptional(DATA_FILES.orderbook, { usable: false, reason: "not_collected" }),
       readJSON(DATA_FILES.heartbeat),
       readJSON(DATA_FILES.shadowV3),
-      readJSONOptional(DATA_FILES.v3AllowedTrace, []),
-      readJSONOptional(DATA_FILES.v3SetupPassBlockedTrace, []),
     ]);
-    render(snapshot, metrics, state, portfolio, gate, auxStatus, heartbeat, shadow, allowedTrace, setupPassBlockedTrace);
+    render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, heartbeat, shadow);
   } catch (error) {
     document.getElementById("alerts").innerHTML = `
       <div class="alert-item bad">
         <strong>DASHBOARD LOAD FAILURE</strong>
-        <span>${error.message}. Make sure the dashboard is opened through the local HTTP server.</span>
+        <span>${error.message}. Serve the repository root over HTTP and refresh.</span>
       </div>
     `;
   } finally {

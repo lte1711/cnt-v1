@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "symbol": "ETHUSDT",
+  "source": "binance_spot_testnet_depth",
+  "timestamp_ms": 1777559042919,
+  "best_bid": 2259.37,
+  "best_ask": 2259.52,
+  "spread": 0.15000000000009095,
+  "spread_pct": 6.638798465998994e-05,
+  "bid_depth_notional": 636776.8601639998,
+  "ask_depth_notional": 1092864.3402000002,
+  "imbalance": 0.582667799415494,
+  "depth_limit": 100,
+  "top_levels": 20,
+  "freshness_ms": 238,
+  "usable": true,
+  "reason": "ok"
+}

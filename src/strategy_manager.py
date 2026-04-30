@@ -6,6 +6,7 @@ from pathlib import Path
 from binance_client import get_price
 from config import ACTIVE_STRATEGIES, ACTIVE_STRATEGY, ENTRY_INTERVAL, KLINES_LIMIT, PRIMARY_INTERVAL, SIGNAL_LOG_FILE, STRATEGY_PARAMS
 from src.market.feature_snapshot import build_market_feature_snapshot
+from src.market.orderbook_snapshot import get_orderbook_snapshot_safely
 from src.market_data import get_recent_closed_klines
 from src.models.market_context import MarketContext
 from src.models.strategy_signal import StrategySignal
@@ -70,6 +71,7 @@ def _run_strategy(strategy_name: str, symbol: str, signal_log_file: Path) -> Str
             limit=KLINES_LIMIT,
         )
         last_price = get_price(symbol)
+        orderbook_snapshot = get_orderbook_snapshot_safely(symbol)
 
         context = MarketContext(
             symbol=symbol,
@@ -78,6 +80,8 @@ def _run_strategy(strategy_name: str, symbol: str, signal_log_file: Path) -> Str
             klines_primary=klines_primary,
             klines_entry=klines_entry,
             last_price=last_price,
+            orderbook_imbalance=orderbook_snapshot.get("imbalance"),
+            orderbook_snapshot=orderbook_snapshot,
         )
 
         signal = _ensure_decision_metadata(strategy.evaluate(context), context, params)

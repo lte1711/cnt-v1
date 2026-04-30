@@ -26,6 +26,13 @@ class MarketFeatureSnapshotTests(unittest.TestCase):
             klines_primary=klines,
             klines_entry=klines,
             last_price=139.0,
+            orderbook_imbalance=1.25,
+            orderbook_snapshot={
+                "usable": True,
+                "reason": "ok",
+                "imbalance": 1.25,
+                "spread_pct": 0.0001,
+            },
         )
 
         snapshot = build_market_feature_snapshot(
@@ -42,6 +49,8 @@ class MarketFeatureSnapshotTests(unittest.TestCase):
         self.assertEqual(snapshot["schema_version"], "1.0")
         self.assertEqual(snapshot["symbol"], "ETHUSDT")
         self.assertIn("multi_timeframe_trend", snapshot)
+        self.assertEqual(snapshot["orderbook"]["imbalance"], 1.25)
+        self.assertTrue(snapshot["orderbook"]["usable"])
         self.assertIn("rsi", snapshot["entry"])
         self.assertIn("ema_slope_pct", snapshot["entry"])
         self.assertIn("atr_pct", snapshot["entry"])

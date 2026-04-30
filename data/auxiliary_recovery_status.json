@@ -1,40 +1,40 @@
 {
-  "timestamp": "2026-04-29 02:04:03",
+  "timestamp": "2026-05-01 00:04:04",
   "official_gate": {
-    "status": "LIVE_READY",
-    "reason": "ALL_GATES_PASSED",
-    "expectancy": 0.0006072727272726092,
-    "net_pnl": 0.033399999999993546,
-    "closed_trades": 55
+    "status": "FAIL",
+    "reason": "NON_POSITIVE_EXPECTANCY",
+    "expectancy": -0.0003192698412699674,
+    "net_pnl": -0.020114000000007903,
+    "closed_trades": 63
   },
   "pullback_v1": {
-    "closed_trades": 55,
-    "wins": 29,
-    "losses": 26,
-    "win_rate": 0.5272727272727272,
-    "expectancy": 0.0006072727272726092,
-    "profit_factor": 1.0913829190549604,
-    "net_pnl": 0.033399999999993546,
-    "signals_generated": 903,
-    "signals_selected": 358
+    "closed_trades": 63,
+    "wins": 32,
+    "losses": 31,
+    "win_rate": 0.5079365079365079,
+    "expectancy": -0.0003192698412699674,
+    "profit_factor": 0.9542941544054823,
+    "net_pnl": -0.020114000000007903,
+    "signals_generated": 1009,
+    "signals_selected": 410
   },
   "system_excluding_breakout_v1": {
     "excluded_strategy": "breakout_v1",
     "included_strategies": [
       "pullback_v1"
     ],
-    "closed_trades": 55,
-    "wins": 29,
-    "losses": 26,
-    "win_rate": 0.5272727272727272,
-    "expectancy": 0.0006072727272726092,
-    "profit_factor": 1.0913829190549604,
-    "net_pnl": 0.033399999999993546
+    "closed_trades": 63,
+    "wins": 32,
+    "losses": 31,
+    "win_rate": 0.5079365079365079,
+    "expectancy": -0.0003192698412699674,
+    "profit_factor": 0.9542941544054823,
+    "net_pnl": -0.020114000000007903
   },
   "recovery_signal": {
     "status": "RECOVERY_NOT_CONFIRMED",
-    "is_positive_expectancy": true,
-    "is_positive_net_pnl": true,
+    "is_positive_expectancy": false,
+    "is_positive_net_pnl": false,
     "profit_factor_pass": false,
     "is_statistically_valid": true,
     "all_recovery_criteria_passed": false,
@@ -43,8 +43,8 @@
   },
   "runtime_state": {
     "active_strategy": "pullback_v1",
-    "last_run_time": "2026-04-29 02:04:00",
-    "last_action": "NO_ENTRY_SIGNAL",
+    "last_run_time": "2026-05-01 00:04:00",
+    "last_action": "EXECUTION_BLOCKED_BY_RISK",
     "pending_order_exists": false,
     "open_trade_exists": false,
     "open_positions_count": 0,
@@ -53,8 +53,8 @@
   "risk_counter_sync": {
     "daily_loss_count_synced": true,
     "consecutive_losses_synced": true,
-    "state_daily_loss_count": 1,
-    "portfolio_daily_loss_count": 1,
+    "state_daily_loss_count": 0,
+    "portfolio_daily_loss_count": 0,
     "state_consecutive_losses": 1,
     "portfolio_consecutive_losses": 1
   },

@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "1e03175e29d1c005",
+        "id": "36a068991f4c7a05",
         "type": "tabs",
         "children": [
           {
-            "id": "82dbdf26425a4696",
+            "id": "dae88880a1b6f9b3",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "docs/CNT LIVE_GATE_BREAKOUT_V1_REMOVAL_PLAN_20260428.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "CNT LIVE_GATE_BREAKOUT_V1_REMOVAL_PLAN_20260428"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "그래프 뷰"
             }
           }
         ]
@@ -40,8 +36,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "byModifiedTime",
-                "autoReveal": true
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "파일 탐색기"
@@ -53,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "0428",
+                "query": "[\"tags\"]",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -180,8 +176,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 320,
-    "collapsed": true
+    "width": 320
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -199,44 +194,44 @@
       "audio-recorder:녹음 시작/정지": false
     }
   },
-  "active": "82dbdf26425a4696",
+  "active": "dae88880a1b6f9b3",
   "lastOpenFiles": [
-    "archive/docs_backup_tags_20260427_165419/ko/CNT TRADING STATUS REPORT 20260425 1948 KO.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_POSITIVE_EDGE_EVIDENCE_FROM_BLOCKED_STATE_20260426.md",
     "data/engine.lock",
-    "docs/CNT BREAKOUT_V1_DEACTIVATION_FINAL_VERIFICATION_20260427.md",
-    "docs/CNT BREAKOUT_V1_DEACTIVATION_PLAN_20260427.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_POST_LOGGING_PARTIAL_VALIDATION_20260427.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_PULLBACK_MARKET_CONTEXT_ANALYSIS_20260426.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_TRADE_BLOCK_AND_MARKET_CONTEXT_REVIEW_20260426.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_MARKET_CONTEXT_LOGGING_LAYER_IMPLEMENTATION_20260426.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_NEXT_CONTEXT_FILTER_VALIDATION_20260426.md",
-    "archive/docs_backup_tags_20260427_165419/ko/CNT v2 VALIDATION REPORT KO.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_PRE_RUNUP_THRESHOLD_ANALYSIS_20260427.md",
-    "docs/CNT_FULL_FILTER_RERUN_20260427.md",
-    "docs/CNT FULL_FILTER_RERUN_EVALUATION_REPORT_20260427.md",
-    "docs/CNT FULL_FILTER_RERUN_COMPARATIVE_EVALUATION_REPORT_20260427.md",
-    "docs/CNT FULL_FILTER_RERUN_VALIDATION_REPORT_20260427.md",
-    "docs/CNT FULL_FILTER_RERUN_ENHANCED_VALIDATION_REPORT_20260427.md",
-    "docs/CNT FULL_FILTER_RERUN_FINAL_VALIDATION_SUMMARY_20260427.md",
-    "docs/CNT FULL_FILTER_RERUN_ANALYSIS_COMPLETION_DECLARATION_20260427.md",
-    "docs/CNT_PRE_RUNUP_THRESHOLD_ANALYSIS_20260427.md",
-    "docs/CNT_GRAPH_VIEW_COLOR_CONFIGURATION_APPLICATION_20260427.md",
-    "docs/CNT_POST_LOGGING_PARTIAL_VALIDATION_20260427.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_FULL_FILTER_RERUN_READY_PREP_20260427.md",
-    "archive/docs_backup_tags_20260427_165419/CNT_GRAPH_VIEW_COLOR_CONFIGURATION_APPLICATION_20260427.md",
-    "docs/ko/CNT DOCS KOREAN MIRROR POLICY KO.md",
-    "archive/docs_backup_tags_20260427_165419/ko/CNT DOCS KOREAN MIRROR POLICY KO.md",
-    "reports/cnt_full_filter_rerun_20260427.json",
-    "archive/docs_backup_tags_20260427_165419/ko/CNT v1.1 ARCHITECTURE DESIGN DOCUMENT KO.md",
-    "tools/cleanup_tags.py",
-    "tools/normalize_md_tags.py",
-    "archive/docs_backup_tags_20260427_165419/ko",
-    "archive/docs_backup_tags_20260427_165419/canvas_color_config.json",
-    "archive/docs_backup_tags_20260427_165419",
-    "reports/cnt_md_tag_summary_20260427.csv",
-    "reports/cnt_md_tag_file_map_20260427.csv",
-    "tools/__pycache__/full_filter_rerun_exchange_replay.cpython-312.pyc",
-    "무제.canvas"
+    "docs/CNT_ALGOUSDT_VALIDATION_LOOP_IMPLEMENTATION_20260430.md",
+    "run_algousdt_validation.ps1",
+    "docs/CNT_SYMBOL_VALIDATION_REPORTING_IMPLEMENTATION_20260430.md",
+    "tests/__pycache__/test_symbol_validation_report.cpython-312-pytest-9.0.3.pyc",
+    "tools/__pycache__/generate_symbol_validation_report.cpython-312.pyc",
+    "src/logging/__pycache__/symbol_validation_logger.cpython-312.pyc",
+    "src/analytics/__pycache__/symbol_validation_report.cpython-312.pyc",
+    "tests/test_symbol_validation_report.py",
+    "data/symbol_validation_report.json",
+    "tools/generate_symbol_validation_report.py",
+    "src/analytics/symbol_validation_report.py",
+    "docs/CNT_ALGOUSDT_TESTNET_VALIDATION_CHECKLIST_20260430.md",
+    "docs/CNT_MULTI_SYMBOL_SCANNER_IMPLEMENTATION_REPORT_20260430.md",
+    "docs/CNT_STRATEGY_TUNING_GATE_REVIEW_20260430.md",
+    "docs/CNT_POST_MIN_TRADE_OBSERVATION_START_20260430.md",
+    "docs/CNT_MULTI_SYMBOL_VALIDATION_NEXT_STEP_REVIEW_20260430.md",
+    "docs/CNT_DASHBOARD_MIN_TRADE_POLICY_PATCH_REPORT_20260430.md",
+    "docs/CNT_CURRENT_STRATEGY_ANALYSIS_20260430.md",
+    "docs/202604290305.md",
+    "docs/2026-04-29.md",
+    "assets/breakout_v3 allowed signal log.md",
+    "docs/CNT_ORDERBOOK_AUXILIARY_DATA_IMPLEMENTATION_REPORT_20260430.md",
+    "docs/CNT_ORDERBOOK_APPLICABILITY_REVIEW_20260430.md",
+    "docs/CNT_DASHBOARD_OPERATION_DATA_RENEWAL_REPORT_20260430.md",
+    "docs/00 Docs Index.md",
+    "docs/ko/CNT PROGRESS STATUS REPORT 20260426 0204 KO.md",
+    "docs/ko/00 Docs Index KO.md",
+    "무제.canvas",
+    "archive/docs_backup_tags_20260427_165419/CNT v2 METRICS AND STRATEGY ATTRIBUTION FIX REPORT.md",
+    "docs/ko/CNT v2 BREAKOUT TREND FILTER REVIEW REPORT KO.md",
+    "docs/CNT v2 PHASE 1 MONITORING IMPLEMENTATION REPORT.md",
+    "docs/ko/CNT v2 BREAKOUT V3 SHADOW VALIDATION RUNTIME INTEGRATION PLAN KO.md",
+    "templates/allowed_signal_log.md",
+    "archive/docs_backup_tags_20260427_165419/ko/CNT OBSIDIAN PLUGIN POLICY KO.md",
+    "archive/docs_backup_tags_20260427_165419/ko/CNT v2 DASHBOARD ESSENTIAL VIEW REFINEMENT REPORT KO.md",
+    "v3.canvas"
   ]
 }

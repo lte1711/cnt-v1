@@ -55,6 +55,7 @@ from src.balance_reader import extract_asset_balance
 from src.execution_decider import decide_execution
 from src.entry_gate import evaluate_entry_gate_from_signal
 from src.logging.portfolio_logger import append_portfolio_log
+from src.logging.symbol_validation_logger import append_symbol_validation_event, build_symbol_validation_event
 from src.log_writer import append_log
 from src.models.exit_signal import ExitSignal
 from src.models.strategy_signal import StrategySignal
@@ -516,6 +517,94 @@ def _extract_fill_price(order_info: dict) -> float:
     return 0.0
 
 
+def _orderbook_from_market_features(market_features: dict | None) -> dict:
+    if not isinstance(market_features, dict):
+        return {}
+
+    orderbook = market_features.get("orderbook")
+    return dict(orderbook) if isinstance(orderbook, dict) else {}
+
+
+def _append_symbol_validation_event_safely(event_payload: dict) -> None:
+    try:
+        append_symbol_validation_event(event_payload)
+    except Exception:
+        pass
+
+
+def _exchange_payload_from_order_response(order_response: dict) -> dict:
+    fill_price = _extract_fill_price(order_response)
+    return {
+        "order_id": order_response.get("orderId"),
+        "status": order_response.get("status"),
+        "executed_qty": float(order_response.get("executedQty", 0.0) or 0.0),
+        "cummulative_quote_qty": float(order_response.get("cummulativeQuoteQty", 0.0) or 0.0),
+        "fill_price": fill_price if fill_price > 0 else None,
+    }
+
+
+def _log_symbol_validation_from_signal(
+    *,
+    event: str,
+    symbol: str,
+    signal: StrategySignal,
+    order_response: dict,
+    validated_price: float | None,
+    validated_qty: float | None,
+    notional_value: float | None,
+    reason: str,
+) -> None:
+    _append_symbol_validation_event_safely(
+        build_symbol_validation_event(
+            event=event,
+            symbol=symbol,
+            strategy_name=signal.strategy_name,
+            decision_id=signal.decision_id,
+            signal_price=float(signal.entry_price_hint) if signal.entry_price_hint is not None else None,
+            validated_price=validated_price,
+            validated_qty=validated_qty,
+            notional_value=notional_value,
+            side=str(order_response.get("side", "BUY")),
+            orderbook=_orderbook_from_market_features(signal.market_features),
+            exchange=_exchange_payload_from_order_response(order_response),
+            reason=reason,
+        )
+    )
+
+
+def _log_symbol_validation_from_open_trade(
+    *,
+    event: str,
+    symbol: str,
+    open_trade: dict | None,
+    order_response: dict,
+    validated_price: float | None,
+    validated_qty: float | None,
+    notional_value: float | None,
+    reason: str,
+    close_pnl_estimate: float | None = None,
+) -> None:
+    trade = open_trade if isinstance(open_trade, dict) else {}
+    market_features = trade.get("market_features") if isinstance(trade.get("market_features"), dict) else {}
+    _append_symbol_validation_event_safely(
+        build_symbol_validation_event(
+            event=event,
+            symbol=symbol,
+            strategy_name=str(trade.get("strategy_name") or ACTIVE_STRATEGY),
+            decision_id=trade.get("decision_id"),
+            signal_price=float(trade.get("entry_price", 0.0) or 0.0) or None,
+            validated_price=validated_price,
+            validated_qty=validated_qty,
+            notional_value=notional_value,
+            side=str(order_response.get("side", "SELL")),
+            orderbook=_orderbook_from_market_features(market_features),
+            exchange=_exchange_payload_from_order_response(order_response),
+            reason=reason,
+            close_pnl_estimate=close_pnl_estimate,
+        )
+    )
+
+
 def _align_quantity_to_step(qty: float, filters: dict) -> float:
     lot_size_filter = filters.get("lot_size_filter", {})
     quantity_check = validate_quantity(qty, lot_size_filter)
@@ -731,6 +820,17 @@ def _execute_protective_exit(
         )
         strategy_name = str((open_trade or {}).get("strategy_name") or ACTIVE_STRATEGY)
         close_pnl_estimate = _estimate_close_pnl(open_trade, fill_price)
+        _log_symbol_validation_from_open_trade(
+            event="exit_order_result",
+            symbol=symbol,
+            open_trade=open_trade,
+            order_response=order_response,
+            validated_price=None,
+            validated_qty=aligned_stop_qty,
+            notional_value=fill_price * aligned_stop_qty,
+            reason=filled_action.lower(),
+            close_pnl_estimate=close_pnl_estimate,
+        )
         record_closed_trade(strategy_metrics, strategy_name, close_pnl_estimate)
         save_strategy_metrics(strategy_metrics_file, strategy_metrics)
         append_portfolio_log(
@@ -765,6 +865,16 @@ def _execute_protective_exit(
         order_response,
         "SELL",
         exit_type=exit_signal.exit_type,
+    )
+    _log_symbol_validation_from_open_trade(
+        event="exit_order_result",
+        symbol=symbol,
+        open_trade=open_trade,
+        order_response=order_response,
+        validated_price=None,
+        validated_qty=aligned_stop_qty,
+        notional_value=None,
+        reason=str(order_response.get("status", "submitted")).lower(),
     )
 
     return (
@@ -1057,6 +1167,17 @@ def start_engine() -> None:
                 fill_price = _extract_fill_price(pending_fill_order or {}) or price
                 strategy_name = str((open_trade or {}).get("strategy_name") or ACTIVE_STRATEGY)
                 close_pnl_estimate = _estimate_close_pnl(open_trade, fill_price)
+                _log_symbol_validation_from_open_trade(
+                    event="exit_order_result",
+                    symbol=SYMBOL,
+                    open_trade=open_trade,
+                    order_response=pending_fill_order or {},
+                    validated_price=fill_price,
+                    validated_qty=float((pending_fill_order or {}).get("executedQty", 0.0) or 0.0),
+                    notional_value=float((pending_fill_order or {}).get("cummulativeQuoteQty", 0.0) or 0.0),
+                    reason=action.lower(),
+                    close_pnl_estimate=close_pnl_estimate,
+                )
                 record_closed_trade(strategy_metrics, strategy_name, close_pnl_estimate)
                 save_strategy_metrics(strategy_metrics_file, strategy_metrics)
                 append_portfolio_log(
@@ -1284,6 +1405,17 @@ def start_engine() -> None:
                     fill_price = _extract_fill_price(order_response) or price
                     strategy_name = str((open_trade or {}).get("strategy_name") or ACTIVE_STRATEGY)
                     close_pnl_estimate = _estimate_close_pnl(open_trade, fill_price)
+                    _log_symbol_validation_from_open_trade(
+                        event="exit_order_result",
+                        symbol=SYMBOL,
+                        open_trade=open_trade,
+                        order_response=order_response,
+                        validated_price=float(adjusted_exit["adjusted_price"]),
+                        validated_qty=adjusted_exit_qty,
+                        notional_value=float(adjusted_exit["adjusted_price"]) * adjusted_exit_qty,
+                        reason="sell_filled",
+                        close_pnl_estimate=close_pnl_estimate,
+                    )
                     record_closed_trade(strategy_metrics, strategy_name, close_pnl_estimate)
                     save_strategy_metrics(strategy_metrics_file, strategy_metrics)
                     append_portfolio_log(
@@ -1324,6 +1456,16 @@ def start_engine() -> None:
                     "SELL",
                     exit_type=exit_signal.exit_type,
                     partial_qty=adjusted_exit_qty if exit_signal.exit_type == "PARTIAL" else None,
+                )
+                _log_symbol_validation_from_open_trade(
+                    event="exit_order_result",
+                    symbol=SYMBOL,
+                    open_trade=open_trade,
+                    order_response=order_response,
+                    validated_price=float(adjusted_exit["adjusted_price"]),
+                    validated_qty=adjusted_exit_qty,
+                    notional_value=float(adjusted_exit["adjusted_price"]) * adjusted_exit_qty,
+                    reason="sell_submitted",
                 )
 
                 _save_and_finish(
@@ -1552,6 +1694,16 @@ def start_engine() -> None:
         _validate_limit_order_before_live(payload)
         order_response = send_live_testnet_order(payload)
         order_status = str(order_response.get("status", "")).upper()
+        _log_symbol_validation_from_signal(
+            event="entry_order_result",
+            symbol=SYMBOL,
+            signal=signal,
+            order_response=order_response,
+            validated_price=float(adj["adjusted_price"]),
+            validated_qty=float(adj["adjusted_qty"]),
+            notional_value=float(adj["adjusted_price"]) * float(adj["adjusted_qty"]),
+            reason="buy_filled" if order_status == "FILLED" else "buy_submitted",
+        )
 
         if order_status == "FILLED":
             exit_extensions = _build_exit_extension_fields(signal.exit_model, _extract_fill_price(order_response))

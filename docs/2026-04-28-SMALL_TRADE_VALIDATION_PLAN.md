@@ -59,8 +59,8 @@ run.ps1 (기존 진입점)
 ### 2.2 병행 검증 (매 3-5시간)
 
 ```
-Trade #54-58: 기본 모니터링
-Trade #59-60: Mini evaluation
+Trade [[54-58]]: 기본 모니터링
+Trade [[59-60]]: Mini evaluation
   - Expectancy 안정성
   - Win rate 변화
   - Risk trigger 정상 작동

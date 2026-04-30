@@ -396,6 +396,19 @@ const DATA_FILES = {
 const FALLBACK_MIN_TRADE_QTY = 0.01;
 const FALLBACK_MIN_NOTIONAL = 5.0;
 
+function el(id) {
+  const node = document.getElementById(id);
+  if (node) return node;
+  return {
+    style: {},
+    classList: { toggle() {}, add() {}, remove() {} },
+    addEventListener() {},
+    set textContent(_value) {},
+    set innerHTML(_value) {},
+    set className(_value) {},
+  };
+}
+
 function fmt(value, digits = 4) {
   if (value == null || Number.isNaN(Number(value))) return "--";
   return Number(value).toFixed(digits);
@@ -680,41 +693,41 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
   const ob = orderbookState(orderbook);
   const validation = validationStatus(validationReport);
 
-  document.getElementById("last-update").textContent = snapshot?.timestamp ?? "--";
-  document.getElementById("phase-badge").textContent = phase.title;
-  document.getElementById("phase-badge").className = `badge ${badgeCls(phase.level)}`;
-  document.getElementById("gate-badge").textContent = gate?.status ?? "--";
-  document.getElementById("gate-badge").className = `badge ${gateReady ? "ok" : gate?.status === "FAIL" ? "bad" : "warn"}`;
-  document.getElementById("position-badge").textContent = position.title;
-  document.getElementById("position-badge").className = `badge ${badgeCls(position.level)}`;
+  el("last-update").textContent = snapshot?.timestamp ?? "--";
+  el("phase-badge").textContent = phase.title;
+  el("phase-badge").className = `badge ${badgeCls(phase.level)}`;
+  el("gate-badge").textContent = gate?.status ?? "--";
+  el("gate-badge").className = `badge ${gateReady ? "ok" : gate?.status === "FAIL" ? "bad" : "warn"}`;
+  el("position-badge").textContent = position.title;
+  el("position-badge").className = `badge ${badgeCls(position.level)}`;
 
-  document.getElementById("phase-title").textContent = phase.title;
-  document.getElementById("phase-title").className = `metric-value small ${cls(phase.level)}`;
-  document.getElementById("phase-sub").textContent = phase.detail;
-  document.getElementById("gate-title").textContent = gate?.status ?? "--";
-  document.getElementById("gate-title").className = `metric-value small ${gateReady ? "positive" : "negative"}`;
-  document.getElementById("gate-reason").textContent = gate?.reason ?? "--";
-  document.getElementById("position-title").textContent = position.title;
-  document.getElementById("position-title").className = `metric-value small ${cls(position.level)}`;
-  document.getElementById("position-sub").textContent = position.detail;
-  document.getElementById("risk-title").textContent = risk.title;
-  document.getElementById("risk-title").className = `metric-value small ${cls(risk.level)}`;
-  document.getElementById("risk-sub").textContent = risk.detail;
+  el("phase-title").textContent = phase.title;
+  el("phase-title").className = `metric-value small ${cls(phase.level)}`;
+  el("phase-sub").textContent = phase.detail;
+  el("gate-title").textContent = gate?.status ?? "--";
+  el("gate-title").className = `metric-value small ${gateReady ? "positive" : "negative"}`;
+  el("gate-reason").textContent = gate?.reason ?? "--";
+  el("position-title").textContent = position.title;
+  el("position-title").className = `metric-value small ${cls(position.level)}`;
+  el("position-sub").textContent = position.detail;
+  el("risk-title").textContent = risk.title;
+  el("risk-title").className = `metric-value small ${cls(risk.level)}`;
+  el("risk-sub").textContent = risk.detail;
 
   const warnings = buildWarnings(snapshot, metrics, state, gate, baseline);
-  document.getElementById("warning-items").innerHTML = warnings.map(item => `<span class="pill">${item}</span>`).join("");
-  document.getElementById("warning-strip").classList.toggle("visible", warnings.length > 0);
+  el("warning-items").innerHTML = warnings.map(item => `<span class="pill">${item}</span>`).join("");
+  el("warning-strip").classList.toggle("visible", warnings.length > 0);
 
-  document.getElementById("post-sample").textContent = `${postClosed} / ${reviewSample}`;
-  document.getElementById("post-sample").className = `metric-value small ${postClosed >= reviewSample ? "positive" : "negative"}`;
-  document.getElementById("post-sample-sub").textContent = `baseline ${baseline?.baseline_timestamp ?? "--"}`;
-  document.getElementById("policy-qty").textContent = `${fmt(policyQty, 2)} ${baseline?.policy?.min_trade_qty_asset ?? "ETH"}`;
-  document.getElementById("policy-qty-sub").textContent = `${fmt(policyNotional, 2)} ${baseline?.policy?.min_notional_asset ?? "USDT"} min notional; entry and stop reference`;
-  document.getElementById("tuning-title").textContent = postClosed >= reviewSample ? "REVIEW" : "LOCKED";
-  document.getElementById("tuning-title").className = `metric-value small ${postClosed >= reviewSample ? "positive" : "negative"}`;
-  document.getElementById("tuning-sub").textContent = postClosed >= reviewSample ? "sample target reached" : "parameter changes remain forbidden";
-  document.getElementById("post-progress").style.width = `${samplePct}%`;
-  document.getElementById("baseline-body").innerHTML = kvRows([
+  el("post-sample").textContent = `${postClosed} / ${reviewSample}`;
+  el("post-sample").className = `metric-value small ${postClosed >= reviewSample ? "positive" : "negative"}`;
+  el("post-sample-sub").textContent = `baseline ${baseline?.baseline_timestamp ?? "--"}`;
+  el("policy-qty").textContent = `${fmt(policyQty, 2)} ${baseline?.policy?.min_trade_qty_asset ?? "ETH"}`;
+  el("policy-qty-sub").textContent = `${fmt(policyNotional, 2)} ${baseline?.policy?.min_notional_asset ?? "USDT"} min notional; entry and stop reference`;
+  el("tuning-title").textContent = postClosed >= reviewSample ? "REVIEW" : "LOCKED";
+  el("tuning-title").className = `metric-value small ${postClosed >= reviewSample ? "positive" : "negative"}`;
+  el("tuning-sub").textContent = postClosed >= reviewSample ? "sample target reached" : "parameter changes remain forbidden";
+  el("post-progress").style.width = `${samplePct}%`;
+  el("baseline-body").innerHTML = kvRows([
     ["Baseline Action", baseline?.baseline_action ?? "--"],
     ["Baseline Reason", baseline?.baseline_reason ?? "--"],
     ["Exclude Legacy Trades", String(Boolean(baseline?.observation_rule?.exclude_legacy_undersized_trades))],
@@ -722,29 +735,29 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
   ]);
 
   const alerts = buildAlerts(snapshot, metrics, state, gate, baseline);
-  document.getElementById("alerts").innerHTML = alerts.map(alert => `
+  el("alerts").innerHTML = alerts.map(alert => `
     <div class="alert-item ${alert.level}">
       <strong>${alert.title}</strong>
       <span>${alert.text}</span>
     </div>
   `).join("");
 
-  document.getElementById("m-exp").textContent = fmt(snapshot?.expectancy, 6);
-  document.getElementById("m-exp").className = `metric-value ${num(snapshot?.expectancy, 0) > 0 ? "positive" : "negative"}`;
-  document.getElementById("m-exp-sub").textContent = `closed=${snapshot?.closed_trades ?? 0} | post-policy=${postClosed}`;
-  document.getElementById("m-pf").textContent = fmt(snapshot?.profit_factor, 3);
-  document.getElementById("m-pf").className = `metric-value ${num(snapshot?.profit_factor, 0) >= 1 ? "positive" : "negative"}`;
-  document.getElementById("m-pf-sub").textContent = `wins=${snapshot?.wins ?? 0} losses=${snapshot?.losses ?? 0}`;
-  document.getElementById("m-pnl").textContent = `${num(snapshot?.net_pnl, 0) >= 0 ? "+" : ""}${fmt(snapshot?.net_pnl, 6)}`;
-  document.getElementById("m-pnl").className = `metric-value ${num(snapshot?.net_pnl, 0) >= 0 ? "positive" : "negative"}`;
-  document.getElementById("m-pnl-sub").textContent = `avg win ${fmt(snapshot?.avg_win, 5)} / avg loss ${fmt(snapshot?.avg_loss, 5)}`;
+  el("m-exp").textContent = fmt(snapshot?.expectancy, 6);
+  el("m-exp").className = `metric-value ${num(snapshot?.expectancy, 0) > 0 ? "positive" : "negative"}`;
+  el("m-exp-sub").textContent = `closed=${snapshot?.closed_trades ?? 0} | post-policy=${postClosed}`;
+  el("m-pf").textContent = fmt(snapshot?.profit_factor, 3);
+  el("m-pf").className = `metric-value ${num(snapshot?.profit_factor, 0) >= 1 ? "positive" : "negative"}`;
+  el("m-pf-sub").textContent = `wins=${snapshot?.wins ?? 0} losses=${snapshot?.losses ?? 0}`;
+  el("m-pnl").textContent = `${num(snapshot?.net_pnl, 0) >= 0 ? "+" : ""}${fmt(snapshot?.net_pnl, 6)}`;
+  el("m-pnl").className = `metric-value ${num(snapshot?.net_pnl, 0) >= 0 ? "positive" : "negative"}`;
+  el("m-pnl-sub").textContent = `avg win ${fmt(snapshot?.avg_win, 5)} / avg loss ${fmt(snapshot?.avg_loss, 5)}`;
 
-  document.getElementById("engine-badges").innerHTML = [
+  el("engine-badges").innerHTML = [
     `<span class="badge ${position.level === "ok" ? "ok" : "warn"}">POSITION ${position.title}</span>`,
     `<span class="badge ${state?.pending_order ? "warn" : "ok"}">PENDING ${state?.pending_order ? "YES" : "NO"}</span>`,
     `<span class="badge info">ACTION ${state?.action ?? "--"}</span>`,
   ].join("");
-  document.getElementById("engine-body").innerHTML = kvRows([
+  el("engine-body").innerHTML = kvRows([
     ["Symbol", state?.symbol ?? "--"],
     ["Strategy", state?.strategy_name ?? "--"],
     ["Status", state?.status ?? "--"],
@@ -756,8 +769,8 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
   ]);
 
   const hb = heartbeatStatus(heartbeat);
-  document.getElementById("heartbeat-badges").innerHTML = hb.badges.join("");
-  document.getElementById("heartbeat-body").innerHTML = kvRows([
+  el("heartbeat-badges").innerHTML = hb.badges.join("");
+  el("heartbeat-body").innerHTML = kvRows([
     ["Current Time", heartbeat?.current_time ?? "--"],
     ["Last Start", heartbeat?.last_start_time ?? "--"],
     ["Last Finish", heartbeat?.last_finish_time ?? "--"],
@@ -766,7 +779,7 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
     ["Error", heartbeat?.error_message || "none", heartbeat?.error_message ? "negative" : "positive"],
   ]);
 
-  document.getElementById("strategy-body").innerHTML = kvRows([
+  el("strategy-body").innerHTML = kvRows([
     ["Active Strategy", state?.strategy_name ?? "--"],
     ["Runtime Mode", "ONE_SHOT / scheduled"],
     ["Entry Policy", `BUY LIMIT only; min qty ${fmt(policyQty, 2)}`],
@@ -775,10 +788,10 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
     ["Risk Counters", `daily=${state?.risk_metrics?.daily_loss_count ?? "--"} | consecutive=${state?.risk_metrics?.consecutive_losses ?? "--"}`],
   ]);
 
-  document.getElementById("orderbook-title").textContent = ob.title;
-  document.getElementById("orderbook-title").className = `metric-value small ${cls(ob.level)}`;
-  document.getElementById("orderbook-sub").textContent = ob.detail;
-  document.getElementById("orderbook-body").innerHTML = kvRows([
+  el("orderbook-title").textContent = ob.title;
+  el("orderbook-title").className = `metric-value small ${cls(ob.level)}`;
+  el("orderbook-sub").textContent = ob.detail;
+  el("orderbook-body").innerHTML = kvRows([
     ["Mode", "auxiliary observation only"],
     ["Symbol", orderbook?.symbol ?? state?.symbol ?? "--"],
     ["Usable", String(Boolean(orderbook?.usable)), orderbook?.usable ? "positive" : "negative"],
@@ -793,15 +806,15 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
     ["Freshness", `${orderbook?.freshness_ms ?? "--"} ms`],
   ]);
 
-  document.getElementById("symbol-candidate-title").textContent = `${symbolReport?.candidate_count ?? 0} SCANNED`;
-  document.getElementById("symbol-candidate-title").className = "metric-value small neutral";
-  document.getElementById("symbol-candidate-sub").textContent = `${symbolReport?.strategy ?? "pullback_v1"} | ${symbolReport?.decision ?? "--"}`;
-  document.getElementById("symbol-candidate-body").innerHTML = renderSymbolCandidates(symbolReport);
+  el("symbol-candidate-title").textContent = `${symbolReport?.candidate_count ?? 0} SCANNED`;
+  el("symbol-candidate-title").className = "metric-value small neutral";
+  el("symbol-candidate-sub").textContent = `${symbolReport?.strategy ?? "pullback_v1"} | ${symbolReport?.decision ?? "--"}`;
+  el("symbol-candidate-body").innerHTML = renderSymbolCandidates(symbolReport);
 
-  document.getElementById("validation-title").textContent = validation.title;
-  document.getElementById("validation-title").className = `metric-value small ${cls(validation.level)}`;
-  document.getElementById("validation-sub").textContent = `${validationReport?.symbols?.join(", ") || "ALGOUSDT"} | ${validationReport?.decision ?? "--"}`;
-  document.getElementById("validation-body").innerHTML = kvRows([
+  el("validation-title").textContent = validation.title;
+  el("validation-title").className = `metric-value small ${cls(validation.level)}`;
+  el("validation-sub").textContent = `${validationReport?.symbols?.join(", ") || "ALGOUSDT"} | ${validationReport?.decision ?? "--"}`;
+  el("validation-body").innerHTML = kvRows([
     ["Mode", validationReport?.mode ?? "READ_ONLY_REPORT"],
     ["Events", validationReport?.event_count ?? 0],
     ["Orders", validationReport?.order_count ?? 0],
@@ -818,7 +831,7 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
     ["Avg Imbalance", fmt(validationReport?.orderbook?.avg_imbalance, 3)],
   ]);
 
-  document.getElementById("shadow-body").innerHTML = kvRows([
+  el("shadow-body").innerHTML = kvRows([
     ["Mode", "shadow only"],
     ["Signals", shadow?.signal_count ?? 0],
     ["Allowed", shadow?.allowed_signal_count ?? 0],
@@ -830,7 +843,7 @@ function render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, 
 }
 
 async function loadData() {
-  const button = document.getElementById("refresh-btn");
+  const button = el("refresh-btn");
   button.disabled = true;
   button.textContent = "LOADING";
   try {
@@ -849,7 +862,7 @@ async function loadData() {
     ]);
     render(snapshot, metrics, state, portfolio, gate, baseline, orderbook, symbolReport, validationReport, heartbeat, shadow);
   } catch (error) {
-    document.getElementById("alerts").innerHTML = `
+    el("alerts").innerHTML = `
       <div class="alert-item bad">
         <strong>DASHBOARD LOAD FAILURE</strong>
         <span>${error.message}. Serve the repository root over HTTP and refresh.</span>
@@ -861,7 +874,7 @@ async function loadData() {
   }
 }
 
-document.getElementById("refresh-btn").addEventListener("click", loadData);
+el("refresh-btn").addEventListener("click", loadData);
 window.addEventListener("load", () => {
   loadData();
   setInterval(loadData, 60000);

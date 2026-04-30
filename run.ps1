@@ -164,6 +164,44 @@ try {
 
     $LASTEXITCODE = $Process.ExitCode
 
+    $ReportProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $ReportProcessStartInfo.FileName = $PythonExe
+    $ReportProcessStartInfo.Arguments = ".\tools\generate_symbol_validation_report.py --symbol ALGOUSDT"
+    $ReportProcessStartInfo.WorkingDirectory = $RepoRoot
+    $ReportProcessStartInfo.UseShellExecute = $false
+    $ReportProcessStartInfo.RedirectStandardOutput = $true
+    $ReportProcessStartInfo.RedirectStandardError = $true
+
+    try {
+        $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+        $ReportProcessStartInfo.StandardOutputEncoding = $Utf8NoBom
+        $ReportProcessStartInfo.StandardErrorEncoding = $Utf8NoBom
+    }
+    catch {
+    }
+
+    try {
+        $ReportProcess = New-Object System.Diagnostics.Process
+        $ReportProcess.StartInfo = $ReportProcessStartInfo
+        $null = $ReportProcess.Start()
+
+        $ReportStdout = $ReportProcess.StandardOutput.ReadToEnd()
+        $ReportStderr = $ReportProcess.StandardError.ReadToEnd()
+        $ReportProcess.WaitForExit()
+
+        if (-not [string]::IsNullOrWhiteSpace($ReportStdout)) {
+            Write-Utf8Log -Path $StdoutLog -Message ($ReportStdout.TrimEnd("`r", "`n"))
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace($ReportStderr)) {
+            Write-Utf8Log -Path $StderrLog -Message ($ReportStderr.TrimEnd("`r", "`n"))
+        }
+    }
+    catch {
+        $now = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        Write-Utf8Log -Path $StderrLog -Message "[$now] symbol_validation_report_exception $_"
+    }
+
     $now = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     Write-Utf8Log -Path $StdoutLog -Message "[$now] scheduler_finish exit_code=$LASTEXITCODE"
     Write-SchedulerHeartbeat -Event "finish" -ExitCode $LASTEXITCODE

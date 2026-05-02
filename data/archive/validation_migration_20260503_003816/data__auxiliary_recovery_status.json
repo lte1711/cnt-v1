@@ -1,40 +1,40 @@
 {
-  "timestamp": "2026-05-03 00:44:04",
+  "timestamp": "2026-05-03 00:34:02",
   "official_gate": {
-    "status": "LIVE_READY",
-    "reason": "ALL_GATES_PASSED",
-    "expectancy": 0.0004671785714284397,
-    "net_pnl": 0.026161999999992525,
-    "closed_trades": 56
+    "status": "FAIL",
+    "reason": "NON_POSITIVE_EXPECTANCY",
+    "expectancy": -0.0015255200000000215,
+    "net_pnl": -0.11441400000000168,
+    "closed_trades": 75
   },
   "pullback_v1": {
-    "closed_trades": 56,
-    "wins": 29,
-    "losses": 27,
-    "win_rate": 0.5178571428571429,
-    "expectancy": 0.0004671785714284397,
-    "profit_factor": 1.0701896531833561,
-    "net_pnl": 0.026161999999992525,
-    "signals_generated": 1395,
-    "signals_selected": 355
+    "closed_trades": 75,
+    "wins": 38,
+    "losses": 37,
+    "win_rate": 0.5066666666666667,
+    "expectancy": -0.0015255200000000215,
+    "profit_factor": 0.8532730595364051,
+    "net_pnl": -0.11441400000000168,
+    "signals_generated": 1240,
+    "signals_selected": 516
   },
   "system_excluding_breakout_v1": {
     "excluded_strategy": "breakout_v1",
     "included_strategies": [
       "pullback_v1"
     ],
-    "closed_trades": 56,
-    "wins": 29,
-    "losses": 27,
-    "win_rate": 0.5178571428571429,
-    "expectancy": 0.0004671785714284397,
-    "profit_factor": 1.0701896531833561,
-    "net_pnl": 0.026161999999992525
+    "closed_trades": 75,
+    "wins": 38,
+    "losses": 37,
+    "win_rate": 0.5066666666666667,
+    "expectancy": -0.0015255200000000215,
+    "profit_factor": 0.8532730595364051,
+    "net_pnl": -0.11441400000000168
   },
   "recovery_signal": {
     "status": "RECOVERY_NOT_CONFIRMED",
-    "is_positive_expectancy": true,
-    "is_positive_net_pnl": true,
+    "is_positive_expectancy": false,
+    "is_positive_net_pnl": false,
     "profit_factor_pass": false,
     "is_statistically_valid": true,
     "all_recovery_criteria_passed": false,
@@ -43,8 +43,8 @@
   },
   "runtime_state": {
     "active_strategy": "pullback_v1",
-    "last_run_time": "2026-05-03 00:44:02",
-    "last_action": "HOLD_OPEN_TRADE",
+    "last_run_time": "2026-05-03 00:34:00",
+    "last_action": "PROMOTE_TO_OPEN_TRADE",
     "pending_order_exists": false,
     "open_trade_exists": true,
     "open_positions_count": 1,

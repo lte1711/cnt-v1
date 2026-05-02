@@ -1,51 +1,51 @@
 {
-  "signal_count": 461,
-  "allowed_signal_count": 20,
-  "allowed_signal_ratio": 0.04338394793926247,
-  "expanded_event_count": 461,
+  "signal_count": 692,
+  "allowed_signal_count": 36,
+  "allowed_signal_ratio": 0.05202312138728324,
+  "expanded_event_count": 692,
   "first_blocker_distribution": {
-    "setup_not_ready": 149,
-    "breakout_not_confirmed": 35,
-    "market_not_trend_up": 255,
-    "band_width_fail": 2
+    "setup_not_ready": 261,
+    "breakout_not_confirmed": 53,
+    "market_not_trend_up": 338,
+    "band_width_fail": 4
   },
   "hard_blocker_distribution": {
-    "setup_not_ready": 149,
-    "breakout_not_confirmed": 35,
-    "market_not_trend_up": 255,
-    "band_width_fail": 2
+    "setup_not_ready": 261,
+    "breakout_not_confirmed": 53,
+    "market_not_trend_up": 338,
+    "band_width_fail": 4
   },
   "secondary_blocker_distribution": {
-    "band_width_fail": 394,
-    "band_expansion_fail": 333,
-    "volume_fail": 374,
-    "vwap_distance_fail": 423,
-    "ema_fail": 224,
-    "rsi_threshold_fail": 271
+    "band_width_fail": 613,
+    "band_expansion_fail": 487,
+    "volume_fail": 562,
+    "vwap_distance_fail": 642,
+    "ema_fail": 328,
+    "rsi_threshold_fail": 394
   },
   "soft_pass_count_distribution": {
-    "2": 114,
-    "3": 78,
-    "1": 112,
-    "4": 32,
-    "0": 116,
-    "5": 9
+    "2": 177,
+    "3": 119,
+    "1": 165,
+    "4": 50,
+    "0": 171,
+    "5": 10
   },
   "stage_pass_counts": {
-    "regime": 206,
-    "trigger": 103,
-    "quality": 119,
-    "setup": 43
+    "regime": 354,
+    "trigger": 161,
+    "quality": 179,
+    "setup": 67
   },
   "stage_fail_counts": {
-    "setup": 418,
-    "trigger": 358,
-    "quality": 342,
-    "regime": 255
+    "setup": 625,
+    "trigger": 531,
+    "quality": 513,
+    "regime": 338
   },
   "min_soft_pass_required": 3,
   "soft_total_count": 6,
   "aggregation_scope": "all_breakout_v3_shadow_events",
   "strategy": "breakout_v3_shadow",
-  "last_updated": "2026-05-01T00:04:04+09:00"
+  "last_updated": "2026-05-03T00:24:04+09:00"
 }

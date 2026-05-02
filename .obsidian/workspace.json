@@ -11,10 +11,14 @@
             "id": "dae88880a1b6f9b3",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "그래프 뷰"
+              "type": "markdown",
+              "state": {
+                "file": "docs/ko/CNT v2 OBSIDIAN INTEGRATED OPERATING PROTOCOL KO.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CNT v2 OBSIDIAN INTEGRATED OPERATING PROTOCOL KO"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "[\"tags\"]",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -197,6 +201,8 @@
   "active": "dae88880a1b6f9b3",
   "lastOpenFiles": [
     "data/engine.lock",
+    "docs/ko/00 Docs Index KO.md",
+    "logs/symbol_validation.log",
     "docs/CNT_ALGOUSDT_VALIDATION_LOOP_IMPLEMENTATION_20260430.md",
     "run_algousdt_validation.ps1",
     "docs/CNT_SYMBOL_VALIDATION_REPORTING_IMPLEMENTATION_20260430.md",
@@ -207,7 +213,6 @@
     "tests/test_symbol_validation_report.py",
     "data/symbol_validation_report.json",
     "tools/generate_symbol_validation_report.py",
-    "src/analytics/symbol_validation_report.py",
     "docs/CNT_ALGOUSDT_TESTNET_VALIDATION_CHECKLIST_20260430.md",
     "docs/CNT_MULTI_SYMBOL_SCANNER_IMPLEMENTATION_REPORT_20260430.md",
     "docs/CNT_STRATEGY_TUNING_GATE_REVIEW_20260430.md",
@@ -223,7 +228,6 @@
     "docs/CNT_DASHBOARD_OPERATION_DATA_RENEWAL_REPORT_20260430.md",
     "docs/00 Docs Index.md",
     "docs/ko/CNT PROGRESS STATUS REPORT 20260426 0204 KO.md",
-    "docs/ko/00 Docs Index KO.md",
     "무제.canvas",
     "archive/docs_backup_tags_20260427_165419/CNT v2 METRICS AND STRATEGY ATTRIBUTION FIX REPORT.md",
     "docs/ko/CNT v2 BREAKOUT TREND FILTER REVIEW REPORT KO.md",

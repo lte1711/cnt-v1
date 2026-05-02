@@ -1,0 +1,9 @@
+{
+  "status": "FAIL",
+  "reason": "NON_POSITIVE_EXPECTANCY",
+  "metrics": {
+    "closed_trades": 75,
+    "expectancy": -0.0015255200000000215,
+    "net_pnl": -0.11441400000000168
+  }
+}

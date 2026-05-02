@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-05-03 00:38:16",
+  "cutoff": "2026-04-29 02:31:20",
+  "source": "current logs/portfolio.log reconstructed to 2026-04-29 02:31:20 plus logs/check_1.log validation evidence",
+  "backup_data_dir": "data\\archive\\validation_migration_20260503_003816",
+  "backup_log_dir": "logs\\archive\\validation_migration_20260503_003816",
+  "pullback_closed_trades": 56,
+  "pullback_wins": 29,
+  "pullback_losses": 27,
+  "pullback_expectancy": 0.0004671785714284397,
+  "pullback_net_pnl": 0.026161999999992525
+}
